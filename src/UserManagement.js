@@ -79,6 +79,21 @@ export function authenticateUser(username, password) {
     return users.some(user => user.username === username && user.password === password)
 }
 
+/// Login function with detailed error messages
+export function loginUser(username, password) {
+    // Check if username exists
+    if (!userAlreadyExists(username)) {
+        return { success: false, message: "Username does not exist" };
+    }
+
+    // Check if password is correct
+    if (!authenticateUser(username, password)) {
+        return { success: false, message: "Incorrect password" };
+    }
+
+    return { success: true, message: "Login successful" };
+}
+
 /// Creates a new user if the username doesn't already exist
 function createNewUser(username, password) {
     if (users.some(user => user?.username === username))

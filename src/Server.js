@@ -2,7 +2,7 @@ import express from 'express';
 import session from 'express-session';
 //import { testUserDatabase } from "./UserManagement.js";
 
-import { loadUsers, authenticateUser, saveUsers, getUserAttribute, registerUser } from "./UserManagement.js";
+import { loadUsers, saveUsers, getUserAttribute, registerUser, loginUser } from "./UserManagement.js";
 
 const app = express();
 const PORT = 3000;
@@ -25,12 +25,14 @@ app.post("/login", (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    if (!authenticateUser(username, password)) {
-        return res.send({success : false});
+    const result = loginUser(username, password);
+
+    if (!result.success) {
+        return res.send(result);
     }
 
     req.session.username = username;
-    return res.send({success : true})
+    return res.send(result);
 });
 
 app.get("/user/:key", (req, res) => {
