@@ -90,8 +90,47 @@ function createNewUser(username, password) {
 }
 
 /// Returns true if the username is already in the database
-function userAlreadyExists(username) {
+export function userAlreadyExists(username) {
     return users.some(user => user.username === username);
+}
+
+/// Validates password strength - returns true if strong, false otherwise
+export function isPasswordStrong(password) {
+    if (password.length < 8) {
+        return false; // Too short
+    }
+    if (!/[A-Z]/.test(password)) {
+        return false; // No uppercase letter
+    }
+    if (!/[a-z]/.test(password)) {
+        return false; // No lowercase letter
+    }
+    if (!/[0-9]/.test(password)) {
+        return false; // No number
+    }
+    return true;
+}
+
+/// Registers a new user - returns success message or error message
+export function registerUser(username, password) {
+    // Check if user already exists
+    if (userAlreadyExists(username)) {
+        return { success: false, message: "Username already exists" };
+    }
+
+    // Check password strength
+    if (!isPasswordStrong(password)) {
+        return {
+            success: false,
+            message: "Password must be at least 8 characters with uppercase, lowercase, and a number"
+        };
+    }
+
+    // Create the new user
+    createNewUser(username, password);
+    saveUsers(); // Save to file
+
+    return { success: true, message: "User registered successfully" };
 }
 
 /// Allows a user to change their password
