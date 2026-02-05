@@ -16,7 +16,7 @@ const referenceUser = {
 let users = []
 
 /// Loads the user dictionaries from the database
-function loadUsers() {
+export function loadUsers() {
     try {
         if (!fs.existsSync(data_path)) {
             users = []
@@ -34,7 +34,7 @@ function loadUsers() {
 }
 
 /// Saves the user-password pairs to the database
-function saveUsers() {
+export function saveUsers() {
     try {
         fs.writeFileSync(
             data_path,
@@ -47,7 +47,7 @@ function saveUsers() {
 }
 
 /// Returns the user with the specified username, returns an empty dict if user does not exist
-function getUser(username) {
+export function getUser(username) {
     return users.find(user => user?.username === username);
 }
 
@@ -75,13 +75,18 @@ function removeUser(username, password) {
 }
 
 /// Returns true if the username exists and the password is correct, false otherwise
-function authenticateUser(username, password) {
+export function authenticateUser(username, password) {
     return users.some(user => user.username === username && user.password === password)
 }
 
 /// Creates a new user if the username doesn't already exist
 function createNewUser(username, password) {
-    
+    if (users.some(user => user?.username === username))
+        return;
+    addUser({
+        username : username,
+        password : password
+    });
 }
 
 /// Returns true if the username is already in the database
@@ -106,6 +111,17 @@ function addAttributeToUsers(key, initialValue) {
             user[key] = initialValue;
         }
     })
+}
+
+export function getUserAttribute(key, username) {
+    const user = getUser(username);
+    if (!user) {
+        return undefined;
+    }
+    if (key in username) {
+        return username[key]
+    }
+    return undefined
 }
 
 /// Checks that the user has all the attributes needed, and adds missing attributes
