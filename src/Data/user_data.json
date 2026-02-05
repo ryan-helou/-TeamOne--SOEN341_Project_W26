@@ -1,17 +1,20 @@
 [
   {
-    "username": "TestUser",
-    "password": "hello123",
-    "diet": "likes food"
+    "username": "user1",
+    "password": "Hello1",
+    "diet": "burgers",
+    "meat": "medium rare"
   },
   {
-    "username": "TestUser",
-    "password": "hello123",
-    "diet": "likes food"
+    "username": "user3",
+    "password": "ABC",
+    "diet": "vegan",
+    "meat": "medium rare"
   },
   {
-    "username": "TestUser",
-    "password": "hello123",
-    "diet": "likes food"
+    "username": "user2",
+    "password": "Hello2",
+    "diet": "shrimp",
+    "meat": "medium rare"
   }
 ]
