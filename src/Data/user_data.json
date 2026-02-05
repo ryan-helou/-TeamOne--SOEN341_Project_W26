@@ -1,0 +1,17 @@
+[
+  {
+    "username": "TestUser",
+    "password": "hello123",
+    "diet": "likes food"
+  },
+  {
+    "username": "TestUser",
+    "password": "hello123",
+    "diet": "likes food"
+  },
+  {
+    "username": "TestUser",
+    "password": "hello123",
+    "diet": "likes food"
+  }
+]
