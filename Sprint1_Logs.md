@@ -65,6 +65,35 @@ Logout:
 
 
 
+
+Dani Elbazzal - 40225455
+
+documentation:
+-helped in excel documenatiom
+Time: 1:30 
+
+Fronend:
+(profile managemnet)
+-Displays user profile information
+-Shows avatar, username, full name, diet, allergies, preferences
+-Navigation buttons for editing
+-Form to edit profile data
+-Fields: full name, dietary preferences, allergies, preferences
+-Save and cancel buttons
+-Password change form
+-Validation: 8+ chars, uppercase, lowercase, number
+-Current, new, and confirm password field
+-Purple gradient design
+-Responsive layout (mobile/tablet/desktop)
+-Dark and light mode support
+-Hover animations
+
+Time: 4 hours
+
+
+
+
+
 Angad Malhotra - 40133666
 
 Back end development & data persistence
