@@ -1,4 +1,4 @@
-Anish Mehra - #40305592
+Anish Mehra - 40305592
 
 Backend Development:
 - Understood the existing code.
