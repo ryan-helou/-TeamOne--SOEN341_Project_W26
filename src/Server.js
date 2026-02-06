@@ -41,7 +41,7 @@ app.post("/login", (req, res) => {
 
 app.post("/update-profile", (req, res) => {
     if (!req.session.username) {
-        return res.send({success : false, message: "Session expired"});
+        return res.send({ success: false, message: "Session expired" });
     }
     const result = updateUser(req.session.username, req.body);
     return res.send(result);
@@ -49,12 +49,12 @@ app.post("/update-profile", (req, res) => {
 
 app.post("/change-password", (req, res) => {
     if (!req.session.username) {
-        return res.send({success : false, message: "Session expired"});
+        return res.send({ success: false, message: "Session expired" });
     }
-    const {oldPassword, newPassword, confirmPassword} = req.body;
+    const { oldPassword, newPassword, confirmPassword } = req.body;
 
     if (newPassword !== confirmPassword) {
-        return res.send({success : false, message: "New passwords do not match"});
+        return res.send({ success: false, message: "New passwords do not match" });
     }
 
     const result = changePassword(req.session.username, oldPassword, newPassword);
@@ -74,15 +74,15 @@ app.get("/user/:key", (req, res) => {
 
 app.get("/logout", (req, res) => {
     if (!req.session.username)
-        return res.send({success : false})
+        return res.send({ success: false })
 
     saveUsers();
 
     req.session.destroy(error => {
         if (error) {
-            return res.send({success : false});
+            return res.send({ success: false });
         }
-        return res.send({success : true});
+        return res.send({ success: true });
     });
 });
 
