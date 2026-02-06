@@ -1,13 +1,31 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ProfileManagement.css';
 
 function ProfileView({ username, onEdit, onChangePassword }) {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchProfile();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      // Call logout endpoint - this saves user data and destroys session
+      await fetch('/logout');
+      // Clear local storage
+      localStorage.removeItem('user');
+      // Redirect to login page
+      navigate('/login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+      // Still redirect even if there's an error
+      localStorage.removeItem('user');
+      navigate('/login');
+    }
+  };
 
   const fetchProfile = async () => {
     setLoading(true);
@@ -59,6 +77,9 @@ function ProfileView({ username, onEdit, onChangePassword }) {
           </button>
           <button onClick={onChangePassword} className="btn-password">
             Change Password
+          </button>
+          <button onClick={handleLogout} className="btn-cancel">
+            Logout
           </button>
         </div>
       </div>
