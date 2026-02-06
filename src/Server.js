@@ -10,7 +10,11 @@ loadUsers();
 
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
-app.use(session({ secret : "soen" }));
+app.use(session({
+    secret: "soen",
+    resave: false,
+    saveUninitialized: false
+}));
 app.use(express.json());
 
 app.post("/register", (req, res) => {
@@ -58,6 +62,8 @@ app.post("/change-password", (req, res) => {
 });
 
 app.get("/user/:key", (req, res) => {
+    console.log("Hello")
+    console.log(req.session.username)
     if (!req.session.username) {
         return res.send(undefined)
     }

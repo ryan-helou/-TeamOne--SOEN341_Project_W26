@@ -3,28 +3,51 @@
     "username": "user1",
     "password": "Hello1",
     "diet": "burgers",
-    "meat": "medium rare"
+    "meat": "medium rare",
+    "fullName": "Happy Weewee",
+    "allergies": "Idiot",
+    "preferences": "Imbecile"
   },
   {
     "username": "user3",
     "password": "ABC",
     "diet": "vegan",
-    "meat": "medium rare"
+    "meat": "medium rare",
+    "fullName": "Happy Weewee",
+    "allergies": "Idiot",
+    "preferences": "Imbecile"
   },
   {
     "username": "user2",
     "password": "Hello2",
     "diet": "shrimp",
-    "meat": "medium rare"
+    "meat": "medium rare",
+    "fullName": "Happy Weewee",
+    "allergies": "Idiot",
+    "preferences": "Imbecile"
   },
   {
     "username": "lebronjames",
     "password": "ryan123321@Q",
-    "diet": "likes food"
+    "diet": "likes food",
+    "fullName": "Happy Weewee",
+    "allergies": "Idiot",
+    "preferences": "Imbecile"
   },
   {
     "username": "yoyoyo",
     "password": "1234567890POoP1",
-    "diet": "likes food"
+    "diet": "likes food",
+    "fullName": "Happy Weewee",
+    "allergies": "Idiot",
+    "preferences": "Imbecile"
+  },
+  {
+    "username": "NewUser",
+    "password": "eeeeeEEE333",
+    "diet": "likes food",
+    "fullName": "Happy Weewee",
+    "allergies": "Idiot",
+    "preferences": "Imbecile"
   }
 ]
