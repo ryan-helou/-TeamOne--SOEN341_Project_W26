@@ -2,7 +2,7 @@ import express from 'express';
 import session from 'express-session';
 //import { testUserDatabase } from "./UserManagement.js";
 
-import { loadUsers, saveUsers, getUserAttribute, registerUser, loginUser } from "./UserManagement.js";
+import { loadUsers, saveUsers, getUserAttribute, registerUser, loginUser, updateUser } from "./UserManagement.js";
 
 const app = express();
 const PORT = 3000;
@@ -32,6 +32,14 @@ app.post("/login", (req, res) => {
     }
 
     req.session.username = username;
+    return res.send(result);
+});
+
+app.post("/update-profile", (req, res) => {
+    if (!req.session.username) {
+        return res.send({success : false, message: "Session expired"});
+    }
+    const result = updateUser(req.session.username, req.body);
     return res.send(result);
 });
 
