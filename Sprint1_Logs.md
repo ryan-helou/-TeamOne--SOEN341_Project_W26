@@ -52,13 +52,16 @@ Login Page:
 Time: 1:30
 
 Registration Page:
-- Deisgned the UI for the registration page (username, password, retype password)
+- Designed the UI for the registration page (username, password, retype password)
 - Implemented the registration page
 - Displayed error messages if conditions were not met (including password and username conditions)
 Time: 1:30
 
 Fixed a bug where page was not loading correct components and css values:
-Time: 1:00
+Time: 30 minutes
+
+Logout:
+- Designed and implemented log out button information
 
 
 
