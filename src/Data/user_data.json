@@ -16,5 +16,15 @@
     "password": "Hello2",
     "diet": "shrimp",
     "meat": "medium rare"
+  },
+  {
+    "username": "lebronjames",
+    "password": "ryan123321@Q",
+    "diet": "likes food"
+  },
+  {
+    "username": "yoyoyo",
+    "password": "1234567890POoP1",
+    "diet": "likes food"
   }
 ]
