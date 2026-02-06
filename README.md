@@ -28,3 +28,6 @@ Data Storage: JSON file-based user database
 - Ghassan Naja - SCRUM Master/Backend developer
 - Angad Malhotra - Backend developer
 - Dani Elbazzi - Frontend developer
+
+## Sprint Planning Document Link:
+https://docs.google.com/spreadsheets/d/1NNvGi2UNgtIRuYHFgibkHyU1sLK9ZTMl/edit?usp=sharing&ouid=109274500478520195448&rtpof=true&sd=true
