@@ -2,20 +2,20 @@
 A web application that allows users to create accounts and manage their food-related preferences and dietary information.
 
 ## Key Features:
-User Authentication: Secure registration and login system with password validation (must include uppercase, lowercase, and numbers)
+- User Authentication: Secure registration and login system with password validation (must include uppercase, lowercase, and numbers)
 
-Profile Management: Users can view and edit their personal information including:Full name
+- Profile Management: Users can view and edit their personal information including:Full name
 
-Dietary preferences (vegetarian, vegan, etc.)
+- Dietary preferences (vegetarian, vegan, etc.)
 
-Food allergies
+- Food allergies
 
-Additional meal planning preferences
+- Additional meal planning preferences
 
-Password Security: Users can change their passwords with validation requirements
+- Password Security: Users can change their passwords with validation requirements
 
-Session Management: Secure session-based authentication to keep users logged in
-To be continued.........
+- Session Management: Secure session-based authentication to keep users logged in
+- To be continued.........
 
 Tech Stack:
 Frontend: React 
