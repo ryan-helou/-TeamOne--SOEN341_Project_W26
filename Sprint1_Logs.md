@@ -1,4 +1,4 @@
-Anish Mehr - #40305592
+Anish Mehra - #40305592
 
 Backend Development:
 - Understood the existing code.
@@ -16,5 +16,31 @@ Testing and Debugging:
  Time spent: 0.5 hours
 
  Total Time: 4 hrs
+
+
+Ghassan Naja - 40264348
+Contribution :
+
+Wrote down the method signatures for all significant methods in Server.js, to act as a basis for implementation
+	- Did not implement each function, but wrote down their signature
+Time : 1hr
+
+Designed methods to write and load user information from a JSON file (acts as a database)
+	- Implemented methods getUser, updateUser, removeUser, authenticateUser, changePassword, addAttributeToUsers, validateUser
+	- Implemented Test method testUserDatabase (to ensure the DB works properly)
+Time : 2hrs
+
+Designed GET and POST requests for the server to respond to the frontend
+	- Added /login to manage the login page
+	- Added /logout to manage the logout page
+	- Added /user/:key to enable access to specific user attributes
+Time : 1hr 30min
+
+Fixed a bug when trying to find the value of a key in the dict containing user data
+	- fixed the getUserAttribute method.
+Time : 30min
+
+Total time : 5 hours
+
 
 
