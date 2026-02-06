@@ -62,3 +62,23 @@ Time: 1:00
 
 
 
+Angad Malhotra - 40133666
+
+Back end development & data persistence
+Total 4 hours
+
+API endpoint creation (1 hour)
+Developed scure POST routes in Node.js (/update-profile and /change-password) to handle incoming data from the frontend
+
+Business logic implementation (2 hours)
+-Wrote validation logic to ensure "New Password" and "Confirm Password" fields match
+-Integrated session-based authentication to ensure users can only update their own profiles
+-Implemented "Old Password" verification to add layer of security before allowing credential
+changes
+
+Data persistence (0.5 hours):
+Created a saving mechanism in UserManagement.js that uses fs.writeFileSync to ensure user upd
+ates are permanently stored in the JSON database
+
+Reponse handling (0.5 hours):
+Developed a standardized JSON response system (returning success: booleon and message: string) to provide clear feedback to the frontend and the end-user
