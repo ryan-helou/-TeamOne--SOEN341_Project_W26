@@ -9,8 +9,11 @@ const data_path = path.join(dir, "Data", "user_data.json");
 
 const referenceUser = {
     username : "TestUser",
+    fullName : "Happy Weewee",
     password : "hello123",
-    diet : "likes food"
+    diet : "likes food",
+    allergies : "Idiot",
+    preferences : "Imbecile"
 }
 
 let users = []
@@ -176,10 +179,7 @@ export function getUserAttribute(key, username) {
     if (!user) {
         return undefined;
     }
-    if (key in username) {
-        return username[key]
-    }
-    return undefined
+    return user[key];
 }
 
 /// Checks that the user has all the attributes needed, and adds missing attributes
