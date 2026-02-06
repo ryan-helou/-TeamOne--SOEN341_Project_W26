@@ -60,12 +60,14 @@ function addUser(user) {
 }
 
 /// Update the data of the user with the new info
-function updateUser(username, newInfo) {
-    users.forEach((user) => {
-        if (user.username === username) {
-            Object.assign(user, newInfo)
-        }
-    });
+export function updateUser(username, newInfo) {
+    const user = getUser(username);
+    if (!user) return { success: false, message: "User not found" };
+
+    Object.assign(user, newInfo);
+    validateUser(user); // Keeps the "referenceUser" structure intact
+    saveUsers();
+    return { success: true, message: "Profile updated successfully" };
 }
 
 function removeUser(username, password) {
