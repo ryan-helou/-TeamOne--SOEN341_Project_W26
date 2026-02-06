@@ -151,12 +151,14 @@ export function registerUser(username, password) {
 }
 
 /// Allows a user to change their password
-function changePassword(username, oldPassword, newPassword) {
-    users.forEach((user) => {
-        if (user.username === username && user.password === oldPassword) {
-            user.password = newPassword;
-        }
-    });
+export function changePassword(username, oldPassword, newPassword) {
+    const user = getUser(username);
+    if (user && user.password === oldPassword) {
+        user.password = newPassword;
+        saveUsers();
+        return { success: true, message: "Password changed successfully" };
+    }
+    return { success: false, message: "Incorrect old password" };
 }
 
 /// Adds an attribute to all users, by providing a new key and an initial value
