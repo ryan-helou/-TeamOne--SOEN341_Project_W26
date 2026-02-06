@@ -42,5 +42,23 @@ Time : 30min
 
 Total time : 5 hours
 
+Ryan Helou - 40315563
+Contribution:
+
+Login Page:
+- Designed the UI for the log in page with username, password, and forget password.
+- Implemented the log in page
+- Displayed error messages if conditions were not met
+Time: 1:30
+
+Registration Page:
+- Deisgned the UI for the registration page (username, password, retype password)
+- Implemented the registration page
+- Displayed error messages if conditions were not met (including password and username conditions)
+Time: 1:30
+
+Fixed a bug where page was not loading correct components and css values:
+Time: 1:00
+
 
 
