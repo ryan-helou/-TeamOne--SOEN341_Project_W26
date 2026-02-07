@@ -1,4 +1,4 @@
-Anish Mehra - 40305592
+**Anish Mehra - 40305592**
 
 Backend Development:
 - Understood the existing code.
@@ -18,7 +18,7 @@ Testing and Debugging:
  Total Time: 4 hrs
 
 
-Ghassan Naja - 40264348
+**Ghassan Naja - 40264348**
 Contribution :
 
 Wrote down the method signatures for all significant methods in Server.js, to act as a basis for implementation
@@ -42,7 +42,8 @@ Time : 30min
 
 Total time : 5 hours
 
-Ryan Helou - 40315563
+
+**Ryan Helou - 40315563**
 Contribution:
 
 Login Page:
@@ -64,9 +65,7 @@ Logout:
 - Designed and implemented log out button information
 
 
-
-
-Dani Elbazzal - 40225455
+**Dani Elbazzal - 40225455**
 
 documentation:
 -helped in excel documenatiom
@@ -91,11 +90,7 @@ Fronend:
 Time: 4 hours
 
 
-
-
-
-Angad Malhotra - 40133666
-
+**Angad Malhotra - 40133666**
 Back end development & data persistence
 Total 4 hours
 
