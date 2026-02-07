@@ -149,7 +149,7 @@ Implement core user authentication and profile management functionality for the 
 - **Ryan Helou:** Stories #1, #2, #4 (Registration, Login, Logout)
 - **Ghassan Naja:** Stories #3, #4, #7 (Session Management, Logout, Database)
 - **Angad Malhotra:** Stories #5, #6 (Profile Viewing, Editing, Password Change)
-- **Dani:** Story #5 (Profile Viewing)
+- **Dani:** Stories #5, #6 (Profile Viewing)
 
 ## Risks Identified
 - **High Risk:** Stories #2, #5, #6 (Login error handling, Profile viewing, Password change)
