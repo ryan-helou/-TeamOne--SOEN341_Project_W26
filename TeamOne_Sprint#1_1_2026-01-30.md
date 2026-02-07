@@ -9,7 +9,7 @@ Jan 30 2026
 - Divided tasks for first user story “User registration and login frontend“
   - Ryan, Angad
 - Divided tasks for second user story “User registration and login backend“
- - Anish, Dani, Ghassan
+  - Anish, Dani, Ghassan
 
 Total time : 2 hours (class-time)
 
