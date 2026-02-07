@@ -103,10 +103,9 @@ API endpoint creation (1 hour)
 Developed scure POST routes in Node.js (/update-profile and /change-password) to handle incoming data from the frontend
 
 Business logic implementation (2 hours)
--Wrote validation logic to ensure "New Password" and "Confirm Password" fields match
--Integrated session-based authentication to ensure users can only update their own profiles
--Implemented "Old Password" verification to add layer of security before allowing credential
-changes
+- Wrote validation logic to ensure "New Password" and "Confirm Password" fields match
+- Integrated session-based authentication to ensure users can only update their own profiles
+- Implemented "Old Password" verification to add layer of security before allowing credential changes
 
 Data persistence (0.5 hours):
 Created a saving mechanism in UserManagement.js that uses fs.writeFileSync to ensure user upd
