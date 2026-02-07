@@ -31,3 +31,11 @@ Data Storage: JSON file-based user database
 
 ## Sprint Planning Document Link:
 https://docs.google.com/spreadsheets/d/1NNvGi2UNgtIRuYHFgibkHyU1sLK9ZTMl/edit?usp=sharing&ouid=109274500478520195448&rtpof=true&sd=true
+
+
+## How to Run:
+in the terminal, run:
+`npm install`
+`node src/Server.js`
+in a different terminal, run:
+`npm run dev`
