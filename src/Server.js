@@ -3,7 +3,7 @@ import session from 'express-session';
 //import { testUserDatabase } from "./UserManagement.js";
 
 import { loadUsers, saveUsers, getUserAttribute, registerUser, loginUser, updateUser, changePassword } from "./UserManagement.js";
-import { loadRecipes, addRecipe, getAllRecipes, getRecipesByUser } from "./RecipeManagement.js";
+import { loadRecipes, addRecipe, getAllRecipes, getRecipesByUser, updateRecipe, deleteRecipe } from "./RecipeManagement.js";
 
 const app = express();
 const PORT = 3000;
@@ -98,6 +98,24 @@ app.post("/recipes", (req, res) => {
 
 app.get("/recipes", (req, res) => {
     return res.send(getAllRecipes());
+});
+
+app.post("/recipes/:id", (req, res) => {
+    if (!req.session.username) {
+        return res.send({ success: false, message: "Session expired" });
+    }
+    const id = parseInt(req.params.id);
+    const result = updateRecipe(id, req.session.username, req.body);
+    return res.send(result);
+});
+
+app.delete("/recipes/:id", (req, res) => {
+    if (!req.session.username) {
+        return res.send({ success: false, message: "Session expired" });
+    }
+    const id = parseInt(req.params.id);
+    const result = deleteRecipe(id, req.session.username);
+    return res.send(result);
 });
 
 app.get("/recipes/mine", (req, res) => {

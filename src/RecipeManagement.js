@@ -89,3 +89,55 @@ export function addRecipe(username, recipeData) {
     saveRecipes();
     return { success: true, message: "Recipe created successfully", recipe };
 }
+
+/// Updates an existing recipe (only if the user is the creator)
+export function updateRecipe(id, username, recipeData) {
+    const recipe = getRecipe(id);
+    if (!recipe) {
+        return { success: false, message: "Recipe not found" };
+    }
+
+    if (recipe.createdBy !== username) {
+        return { success: false, message: "You can only edit your own recipes" };
+    }
+
+    const { title, ingredients, instructions, prepTime, difficulty, cost } = recipeData;
+
+    if (title !== undefined && !title.trim()) {
+        return { success: false, message: "Recipe title cannot be empty" };
+    }
+
+    if (ingredients !== undefined && !ingredients.trim()) {
+        return { success: false, message: "Ingredients cannot be empty" };
+    }
+
+    if (instructions !== undefined && !instructions.trim()) {
+        return { success: false, message: "Instructions cannot be empty" };
+    }
+
+    if (title !== undefined) recipe.title = title.trim();
+    if (ingredients !== undefined) recipe.ingredients = ingredients.trim();
+    if (instructions !== undefined) recipe.instructions = instructions.trim();
+    if (prepTime !== undefined) recipe.prepTime = prepTime;
+    if (difficulty !== undefined) recipe.difficulty = difficulty;
+    if (cost !== undefined) recipe.cost = cost;
+
+    saveRecipes();
+    return { success: true, message: "Recipe updated successfully", recipe };
+}
+
+/// Deletes a recipe (only if the user is the creator)
+export function deleteRecipe(id, username) {
+    const recipe = getRecipe(id);
+    if (!recipe) {
+        return { success: false, message: "Recipe not found" };
+    }
+
+    if (recipe.createdBy !== username) {
+        return { success: false, message: "You can only delete your own recipes" };
+    }
+
+    recipes = recipes.filter(r => r.id !== id);
+    saveRecipes();
+    return { success: true, message: "Recipe deleted successfully" };
+}
