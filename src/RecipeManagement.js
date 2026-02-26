@@ -91,6 +91,14 @@ export function addRecipe(username, recipeData) {
         return { success: false, message: "Instructions are required" };
     }
 
+    if (cost !== undefined) {
+    const numericCost = Number(cost);
+
+    if (!Number.isFinite(numericCost) || numericCost <= 0) {
+            return { success: false, message: "Cost must be a positive number" };
+        }
+    }
+
     if (difficulty !== undefined && !Object.values(difficultyLevels).includes(difficulty)) {
     return { success: false, message: "Invalid difficulty level" };
     }
@@ -116,7 +124,7 @@ export function addRecipe(username, recipeData) {
         instructions: instructions.trim(),
         prepTime: prepTime || "",
         difficulty: difficulty || "",
-        cost: cost || "",
+        cost: cost !== undefined ? Number(cost) : "",
         dietaryTags: dietary ? [...dietary] : [],
         createdBy: username
     };
@@ -152,6 +160,10 @@ export function updateRecipe(id, username, recipeData) {
         return { success: false, message: "Instructions cannot be empty" };
     }
 
+    if (cost !== undefined && (!Number.isFinite(cost) || cost < 0)) {
+        return { success: false, message: "Cost must be a positive number" };
+    }
+
     if (difficulty !== undefined && !Object.values(difficultyLevels).includes(difficulty)) {
         return { success: false, message: "Invalid difficulty level" };
     }
@@ -168,7 +180,7 @@ export function updateRecipe(id, username, recipeData) {
     if (prepTime !== undefined) recipe.prepTime = prepTime;
     if (difficulty !== undefined) recipe.difficulty = difficulty;
     if (dietary !== undefined) recipe.dietaryTags = [...dietary];
-    if (cost !== undefined) recipe.cost = cost;
+    if (cost !== undefined) recipe.cost = Number(cost);
 
     saveRecipes();
     return { success: true, message: "Recipe updated successfully", recipe };
@@ -189,5 +201,4 @@ export function deleteRecipe(id, username) {
     saveRecipes();
     return { success: true, message: "Recipe deleted successfully" };
 }
-
 
