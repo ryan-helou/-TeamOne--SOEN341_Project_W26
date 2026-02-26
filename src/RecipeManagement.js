@@ -10,6 +10,23 @@ const data_path = path.join(dir, "Data", "recipe_data.json");
 let recipes = []
 let nextId = 1
 
+export const difficultyLevels = Object.freeze({
+    Easy : "Easy",
+    Medium : "Medium",
+    Hard : "Hard",
+    Hell : "Hell"
+})
+
+export const dietaryTags = Object.freeze({
+    Vegan : "Vegan",
+    Vegetarian : "Vegetarian",
+    Fish : "Fish",
+    RedMeat : "Red Meat",
+    Dessert : "Dessert",
+    HighProtein : "High Protein",
+    LowCalories : "Low Calories"
+})
+
 /// Loads the recipes from the database
 export function loadRecipes() {
     try {
@@ -60,7 +77,7 @@ export function getRecipesByUser(username) {
 
 /// Creates a new recipe and saves it to the database
 export function addRecipe(username, recipeData) {
-    const { title, ingredients, instructions, prepTime, difficulty, cost } = recipeData;
+    const { title, ingredients, instructions, prepTime, difficulty, cost, dietary } = recipeData;
 
     if (!title || !title.trim()) {
         return { success: false, message: "Recipe title is required" };
@@ -74,6 +91,24 @@ export function addRecipe(username, recipeData) {
         return { success: false, message: "Instructions are required" };
     }
 
+    if (difficulty !== undefined && !Object.values(difficultyLevels).includes(difficulty)) {
+    return { success: false, message: "Invalid difficulty level" };
+    }
+
+    if (dietary !== undefined) {
+        if (!Array.isArray(dietary)) {
+            return { success: false, message: "Dietary tags must be an array" };
+        }
+        
+        const validTags = Object.values(dietaryTags);
+
+        for (const tag of dietary) {
+            if (!validTags.includes(tag)) {
+                return { success: false, message: "Invalid dietary tag" };
+            }
+        }
+    }
+
     const recipe = {
         id: nextId++,
         title: title.trim(),
@@ -82,6 +117,7 @@ export function addRecipe(username, recipeData) {
         prepTime: prepTime || "",
         difficulty: difficulty || "",
         cost: cost || "",
+        dietaryTags: dietary ? [...dietary] : [],
         createdBy: username
     };
 
@@ -92,6 +128,7 @@ export function addRecipe(username, recipeData) {
 
 /// Updates an existing recipe (only if the user is the creator)
 export function updateRecipe(id, username, recipeData) {
+    
     const recipe = getRecipe(id);
     if (!recipe) {
         return { success: false, message: "Recipe not found" };
@@ -101,7 +138,7 @@ export function updateRecipe(id, username, recipeData) {
         return { success: false, message: "You can only edit your own recipes" };
     }
 
-    const { title, ingredients, instructions, prepTime, difficulty, cost } = recipeData;
+    const { title, ingredients, instructions, prepTime, difficulty, cost, dietary } = recipeData;
 
     if (title !== undefined && !title.trim()) {
         return { success: false, message: "Recipe title cannot be empty" };
@@ -115,11 +152,22 @@ export function updateRecipe(id, username, recipeData) {
         return { success: false, message: "Instructions cannot be empty" };
     }
 
+    if (difficulty !== undefined && !Object.values(difficultyLevels).includes(difficulty)) {
+        return { success: false, message: "Invalid difficulty level" };
+    }
+
+    if (dietary !== undefined &&
+        (!Array.isArray(dietary)
+        || dietary.some(tag => !Object.values(dietaryTags).includes(tag)))) {
+            return { success: false, message: "Invalid dietary tag" };
+        }
+
     if (title !== undefined) recipe.title = title.trim();
     if (ingredients !== undefined) recipe.ingredients = ingredients.trim();
     if (instructions !== undefined) recipe.instructions = instructions.trim();
     if (prepTime !== undefined) recipe.prepTime = prepTime;
     if (difficulty !== undefined) recipe.difficulty = difficulty;
+    if (dietary !== undefined) recipe.dietaryTags = [...dietary];
     if (cost !== undefined) recipe.cost = cost;
 
     saveRecipes();
@@ -141,3 +189,5 @@ export function deleteRecipe(id, username) {
     saveRecipes();
     return { success: true, message: "Recipe deleted successfully" };
 }
+
+
