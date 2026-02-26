@@ -13,6 +13,7 @@ export default defineConfig({
       '/update-profile': 'http://localhost:3000',
       '/change-password': 'http://localhost:3000',
       '/user': 'http://localhost:3000',
+      '/recipes': 'http://localhost:3000',
     }
   }
 })
