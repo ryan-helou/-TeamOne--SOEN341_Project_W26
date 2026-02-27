@@ -130,5 +130,21 @@
       "Low Calories"
     ],
     "createdBy": "user2"
+  },
+  {
+    "id": 6,
+    "title": "Test Pasta",
+    "ingredients": [
+      "pasta",
+      "tomato sauce"
+    ],
+    "instructions": "Boil pasta, add sauce, serve hot",
+    "prepTime": 15,
+    "difficulty": "Easy",
+    "cost": 8,
+    "dietaryTags": [
+      "Vegetarian"
+    ],
+    "createdBy": "TestUser1"
   }
 ]

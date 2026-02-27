@@ -129,6 +129,32 @@ function ProfileView({ username, onEdit, onChangePassword }) {
           </div>
         </div>
       </div>
+
+      <button
+        onClick={() => navigate('/recipes')}
+        style={{
+          display: 'block',
+          width: '100%',
+          maxWidth: '480px',
+          margin: '2rem auto 0',
+          padding: '1rem 2rem',
+          fontSize: '1.1rem',
+          fontWeight: '600',
+          fontFamily: 'inherit',
+          color: 'white',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          border: 'none',
+          borderRadius: '0.75rem',
+          cursor: 'pointer',
+          boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+          transition: 'all 0.3s ease',
+          letterSpacing: '0.02em',
+        }}
+        onMouseEnter={(e) => { e.target.style.transform = 'translateY(-3px)'; e.target.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.5)'; }}
+        onMouseLeave={(e) => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)'; }}
+      >
+        🍳 Browse Recipes
+      </button>
     </div>
   );
 }
