@@ -49,5 +49,13 @@
     "fullName": "Happy Weewee",
     "allergies": "Idiot",
     "preferences": "Imbecile"
+  },
+  {
+    "username": "TestUser1",
+    "password": "Password123",
+    "fullName": "Happy Weewee",
+    "diet": "likes food",
+    "allergies": "Idiot",
+    "preferences": "Imbecile"
   }
 ]
