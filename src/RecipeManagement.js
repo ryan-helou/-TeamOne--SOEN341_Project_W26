@@ -10,6 +10,23 @@ const data_path = path.join(dir, "Data", "recipe_data.json");
 let recipes = []
 let nextId = 1
 
+export const difficultyLevels = Object.freeze({
+    Easy : "Easy",
+    Medium : "Medium",
+    Hard : "Hard",
+    Hell : "Hell"
+})
+
+export const dietaryTags = Object.freeze({
+    Vegan : "Vegan",
+    Vegetarian : "Vegetarian",
+    Fish : "Fish",
+    RedMeat : "Red Meat",
+    Dessert : "Dessert",
+    HighProtein : "High Protein",
+    LowCalories : "Low Calories"
+})
+
 /// Loads the recipes from the database
 export function loadRecipes() {
     try {
@@ -60,28 +77,63 @@ export function getRecipesByUser(username) {
 
 /// Creates a new recipe and saves it to the database
 export function addRecipe(username, recipeData) {
-    const { title, ingredients, instructions, prepTime, difficulty, cost } = recipeData;
+    const { title, ingredients, instructions, prepTime, difficulty, cost, dietary } = recipeData;
 
     if (!title || !title.trim()) {
         return { success: false, message: "Recipe title is required" };
     }
 
-    if (!ingredients || !ingredients.trim()) {
-        return { success: false, message: "Ingredients are required" };
+    if (!ingredients || !Array.isArray(ingredients) || ingredients.length == 0) {
+        return { success: false, message: "Ingredients are required as list" };
     }
 
     if (!instructions || !instructions.trim()) {
         return { success: false, message: "Instructions are required" };
     }
 
+    if (prepTime !== undefined) {
+    const numericPrepTime = Number(prepTime);
+
+    if (!Number.isFinite(numericPrepTime) || numericPrepTime <= 0) {
+            return { success: false, message: "Prep time must be a positive number" };
+        }
+    }
+
+    if (cost !== undefined) {
+    const numericCost = Number(cost);
+
+    if (!Number.isFinite(numericCost) || numericCost <= 0) {
+            return { success: false, message: "Cost must be a positive number" };
+        }
+    }
+
+    if (difficulty !== undefined && !Object.values(difficultyLevels).includes(difficulty)) {
+    return { success: false, message: "Invalid difficulty level" };
+    }
+
+    if (dietary !== undefined) {
+        if (!Array.isArray(dietary)) {
+            return { success: false, message: "Dietary tags must be an array" };
+        }
+        
+        const validTags = Object.values(dietaryTags);
+
+        for (const tag of dietary) {
+            if (!validTags.includes(tag)) {
+                return { success: false, message: "Invalid dietary tag" };
+            }
+        }
+    }
+
     const recipe = {
         id: nextId++,
         title: title.trim(),
-        ingredients: ingredients.trim(),
+        ingredients: [...ingredients],
         instructions: instructions.trim(),
-        prepTime: prepTime || "",
+        prepTime: prepTime !== undefined ? Number(prepTime) : "",
         difficulty: difficulty || "",
-        cost: cost || "",
+        cost: cost !== undefined ? Number(cost) : "",
+        dietaryTags: dietary ? [...dietary] : [],
         createdBy: username
     };
 
@@ -92,6 +144,7 @@ export function addRecipe(username, recipeData) {
 
 /// Updates an existing recipe (only if the user is the creator)
 export function updateRecipe(id, username, recipeData) {
+    
     const recipe = getRecipe(id);
     if (!recipe) {
         return { success: false, message: "Recipe not found" };
@@ -101,26 +154,44 @@ export function updateRecipe(id, username, recipeData) {
         return { success: false, message: "You can only edit your own recipes" };
     }
 
-    const { title, ingredients, instructions, prepTime, difficulty, cost } = recipeData;
+    const { title, ingredients, instructions, prepTime, difficulty, cost, dietary } = recipeData;
 
     if (title !== undefined && !title.trim()) {
         return { success: false, message: "Recipe title cannot be empty" };
     }
 
-    if (ingredients !== undefined && !ingredients.trim()) {
+    if (ingredients !== undefined && (!Array.isArray(ingredients) || ingredients.length == 0)) {
         return { success: false, message: "Ingredients cannot be empty" };
     }
 
-    if (instructions !== undefined && !instructions.trim()) {
-        return { success: false, message: "Instructions cannot be empty" };
+    if (cost !== undefined) {
+        const numericCost = Number(cost);
+        if (!Number.isFinite(numericCost) || numericCost <= 0)
+            return { success: false, message: "Cost must be a positive number" };
+    }
+    if (prepTime !== undefined) {
+        const numericPrep = Number(prepTime);
+        if (!Number.isFinite(numericPrep) || numericPrep <= 0)
+            return { success: false, message: "Prep time must be a positive number" };
     }
 
+    if (difficulty !== undefined && !Object.values(difficultyLevels).includes(difficulty)) {
+        return { success: false, message: "Invalid difficulty level" };
+    }
+
+    if (dietary !== undefined &&
+        (!Array.isArray(dietary)
+        || dietary.some(tag => !Object.values(dietaryTags).includes(tag)))) {
+            return { success: false, message: "Invalid dietary tag" };
+        }
+
     if (title !== undefined) recipe.title = title.trim();
-    if (ingredients !== undefined) recipe.ingredients = ingredients.trim();
+    if (ingredients !== undefined) recipe.ingredients = [...ingredients];
     if (instructions !== undefined) recipe.instructions = instructions.trim();
-    if (prepTime !== undefined) recipe.prepTime = prepTime;
+    if (prepTime !== undefined) recipe.prepTime = Number(prepTime);
     if (difficulty !== undefined) recipe.difficulty = difficulty;
-    if (cost !== undefined) recipe.cost = cost;
+    if (dietary !== undefined) recipe.dietaryTags = [...dietary];
+    if (cost !== undefined) recipe.cost = Number(cost);
 
     saveRecipes();
     return { success: true, message: "Recipe updated successfully", recipe };
@@ -140,4 +211,82 @@ export function deleteRecipe(id, username) {
     recipes = recipes.filter(r => r.id !== id);
     saveRecipes();
     return { success: true, message: "Recipe deleted successfully" };
+}
+
+/// Filter recipes based on filterCriteria. title, ingredients, instructions, prepTime, difficulty, cost, dietaryTags
+export function filterRecipes(recipeList, filterCriteria) {
+
+    const filter = {
+        title : filterCriteria["title"] || undefined,
+        ingredients : filterCriteria["ingredients"] || undefined,
+        instructions : filterCriteria["instructions"] || undefined,
+        prepTime : filterCriteria["prepTime"] || undefined,
+        difficulty : filterCriteria["difficulty"] || undefined,
+        cost : filterCriteria["cost"] || undefined,
+        dietaryTags : filterCriteria["dietaryTags"] || undefined,
+    }
+
+    const {title, ingredients, instructions, prepTime, difficulty, cost, dietaryTags} = filter;
+
+    return recipeList.filter(recipe => {
+        if (title) {
+            if (!recipe.title
+                .toLowerCase()
+                .includes(title.toLowerCase()))
+                    return false
+        }
+        
+        if (ingredients) {
+            for (const ingredient of ingredients) {
+                if (!recipe.ingredients.some(
+                    ing => ing.trim().toLowerCase() === ingredient.trim().toLowerCase()
+                )) {
+                    return false;
+                }
+            }
+        }
+
+        if (instructions) {
+            if (!recipe.instructions
+                .toLowerCase()
+                .includes(instructions.toLowerCase())) {
+                return false;
+            }
+        }
+
+        const numericPrep = prepTime !== undefined ? Number(prepTime) : undefined;
+        const numericCost = cost !== undefined ? Number(cost) : undefined;
+
+        if (numericPrep && recipe.prepTime > numericPrep) {
+            return false
+        }
+        if (difficulty && getDifficultyLevel(recipe.difficulty) > getDifficultyLevel(difficulty)) {
+            return false
+        }
+        if (numericCost && recipe.cost > numericCost) {
+            return false
+        }
+        if (dietaryTags && recipe.dietaryTags) {
+            for (const tag of dietaryTags) {
+                if (!recipe.dietaryTags.some(t => t.trim() === tag.trim())) return false;
+            }
+        }
+
+        return true;
+    })
+}
+
+function getDifficultyLevel(difficulty) {
+    switch(difficulty) {
+        case "Easy":
+            return 0
+        case "Medium":
+            return 1
+        case "Hard":
+            return 2
+        case "Hell":
+            return 3
+    }
+
+    return -1;
 }

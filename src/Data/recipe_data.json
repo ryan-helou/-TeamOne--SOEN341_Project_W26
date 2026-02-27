@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "title": "T1",
+    "ingredients": [
+      "egg",
+      "flour"
+    ],
+    "instructions": "mix egg and flour",
+    "prepTime": 8,
+    "difficulty": "Easy",
+    "cost": 2.5,
+    "dietaryTags": [
+      "High Protein"
+    ],
+    "createdBy": "f1"
+  },
+  {
+    "id": 2,
+    "title": "T2",
+    "ingredients": [
+      "egg",
+      "sugar"
+    ],
+    "instructions": "mix egg and sugar",
+    "prepTime": 20,
+    "difficulty": "Medium",
+    "cost": 5,
+    "dietaryTags": [
+      "Dessert"
+    ],
+    "createdBy": "f2"
+  },
+  {
+    "id": 3,
+    "title": "T3",
+    "ingredients": [
+      "fish",
+      "salt"
+    ],
+    "instructions": "cook fish",
+    "prepTime": 30,
+    "difficulty": "Hard",
+    "cost": 10,
+    "dietaryTags": [
+      "Fish"
+    ],
+    "createdBy": "f3"
+  },
+  {
+    "id": 4,
+    "title": "T4",
+    "ingredients": [
+      "beef",
+      "salt"
+    ],
+    "instructions": "cook beef",
+    "prepTime": 40,
+    "difficulty": "Hell",
+    "cost": 15,
+    "dietaryTags": [
+      "Red Meat"
+    ],
+    "createdBy": "f4"
+  },
+  {
+    "id": 5,
+    "title": "T5",
+    "ingredients": [
+      "lettuce",
+      "tomato"
+    ],
+    "instructions": "mix salad",
+    "prepTime": 5,
+    "difficulty": "Easy",
+    "cost": 1,
+    "dietaryTags": [
+      "Vegan"
+    ],
+    "createdBy": "f5"
+  }
+]
