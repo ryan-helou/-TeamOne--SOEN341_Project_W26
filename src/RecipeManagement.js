@@ -214,7 +214,7 @@ export function deleteRecipe(id, username) {
 }
 
 /// Filter recipes based on filterCriteria. title, ingredients, instructions, prepTime, difficulty, cost, dietaryTags
-export function filterRecipes(filterCriteria) {
+export function filterRecipes(recipeList, filterCriteria) {
 
     const filter = {
         title : filterCriteria["title"] || undefined,
@@ -228,7 +228,7 @@ export function filterRecipes(filterCriteria) {
 
     const {title, ingredients, instructions, prepTime, difficulty, cost, dietaryTags} = filter;
 
-    return recipes.filter(recipe => {
+    return recipeList.filter(recipe => {
         if (title) {
             if (!recipe.title
                 .toLowerCase()

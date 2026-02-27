@@ -3,7 +3,7 @@ import session from 'express-session';
 //import { testUserDatabase } from "./UserManagement.js";
 
 import { loadUsers, saveUsers, getUserAttribute, registerUser, loginUser, updateUser, changePassword } from "./UserManagement.js";
-import { loadRecipes, addRecipe, getAllRecipes, getRecipesByUser, updateRecipe, deleteRecipe } from "./RecipeManagement.js";
+import { loadRecipes, addRecipe, getAllRecipes, getRecipesByUser, updateRecipe, deleteRecipe, filterRecipes } from "./RecipeManagement.js";
 
 const app = express();
 const PORT = 3000;
@@ -123,6 +123,28 @@ app.get("/recipes/mine", (req, res) => {
         return res.send({ success: false, message: "Session expired" });
     }
     return res.send(getRecipesByUser(req.session.username));
+});
+
+app.post("/recipes/filter", (req, res) => {
+    if (!req.session.username)
+        return res.send({ success: false, message: "Session expired" });
+
+    const userRecipes = getRecipesByUser(req.session.username);
+    const filterCriteria = {
+        title : req.body.title || undefined,
+        ingredients : Array.isArray(req.body.ingredients)
+            ? req.body.ingredients
+            : req.body.ingredients ? [req.body.ingredients] : undefined,
+        instructions: req.body.instructions || undefined,
+        prepTime: req.body.prepTime || undefined,
+        difficulty: req.body.difficulty || undefined,
+        cost: req.body.cost || undefined,
+        dietaryTags : Array.isArray(req.body.dietaryTags)
+            ? req.body.dietaryTags
+            : req.body.dietaryTags ? [req.body.dietaryTags] : undefined,
+    }
+
+    res.send({ success: true, recipes: filterRecipes(userRecipes, filterCriteria) });
 });
 
 app.listen(PORT, () => {
