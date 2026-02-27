@@ -51,7 +51,7 @@ function RecipePage() {
             await fetch('/logout')
             localStorage.removeItem('user')
             navigate('/login')
-        } catch (err) {
+        } catch {
             localStorage.removeItem('user')
             navigate('/login')
         }
@@ -78,7 +78,7 @@ function RecipePage() {
             const res = await fetch('/recipes/mine')
             const data = await res.json()
             setAllRecipes(data)
-        } catch (err) {
+        } catch {
             setError('Failed to load recipes')
         } finally {
             setLoading(false)
@@ -144,7 +144,7 @@ function RecipePage() {
     }
 
     // ---- CRUD handlers ----
-    const handleCreateSuccess = (newRecipe) => {
+    const handleCreateSuccess = () => {
         setShowForm(false)
         setSuccess('Recipe created successfully!')
         fetchRecipes()
@@ -156,7 +156,7 @@ function RecipePage() {
         setShowForm(true)
     }
 
-    const handleEditSuccess = (updatedRecipe) => {
+    const handleEditSuccess = () => {
         setShowForm(false)
         setEditingRecipe(null)
         setSuccess('Recipe updated successfully!')
@@ -175,7 +175,7 @@ function RecipePage() {
             } else {
                 setError(data.message || 'Delete failed')
             }
-        } catch (err) {
+        } catch {
             setError('Failed to delete recipe')
         }
     }

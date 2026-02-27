@@ -94,7 +94,7 @@ function ChangePassword({ onCancel, onChangeSuccess }) {
       } else {
         setError(result.message);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to change password. Please try again.');
     } finally {
       setLoading(false);

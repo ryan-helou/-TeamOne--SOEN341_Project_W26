@@ -1,14 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// Bypass function: skip proxy for browser page navigations (text/html),
-// so React Router can serve the SPA. API calls (application/json) go to Express.
-function bypassForHtml(req) {
-  if (req.headers.accept && req.headers.accept.includes('text/html')) {
-    return req.url            // return the original URL → Vite serves index.html
-  }
-}
-
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],

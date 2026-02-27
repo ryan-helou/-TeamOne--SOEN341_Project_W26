@@ -101,7 +101,7 @@ function RecipeForm({ recipe, onSubmit, onCancel }) {
             } else {
                 setError(data.message || 'Something went wrong')
             }
-        } catch (err) {
+        } catch {
             setError('Network error. Please try again.')
         } finally {
             setSubmitting(false)

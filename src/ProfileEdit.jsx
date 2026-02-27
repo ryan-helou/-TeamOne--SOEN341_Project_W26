@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './ProfileManagement.css';
 
-function ProfileEdit({ username, onCancel, onSaveSuccess }) {
+function ProfileEdit({ onCancel, onSaveSuccess }) {
   const [formData, setFormData] = useState({
     fullName: '',
     diet: '',
@@ -73,7 +73,7 @@ function ProfileEdit({ username, onCancel, onSaveSuccess }) {
       } else {
         setError(result.message);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to update profile. Please try again.');
     } finally {
       setSaving(false);
