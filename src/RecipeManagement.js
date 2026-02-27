@@ -83,12 +83,20 @@ export function addRecipe(username, recipeData) {
         return { success: false, message: "Recipe title is required" };
     }
 
-    if (!ingredients || !Array.isArray(ingredients) || ingredients.length() == 0) {
+    if (!ingredients || !Array.isArray(ingredients) || ingredients.length == 0) {
         return { success: false, message: "Ingredients are required as list" };
     }
 
     if (!instructions || !instructions.trim()) {
         return { success: false, message: "Instructions are required" };
+    }
+
+    if (prepTime !== undefined) {
+    const numericPrepTime = Number(prepTime);
+
+    if (!Number.isFinite(numericPrepTime) || numericPrepTime <= 0) {
+            return { success: false, message: "Prep time must be a positive number" };
+        }
     }
 
     if (cost !== undefined) {
@@ -122,7 +130,7 @@ export function addRecipe(username, recipeData) {
         title: title.trim(),
         ingredients: [...ingredients],
         instructions: instructions.trim(),
-        prepTime: prepTime || "",
+        prepTime: prepTime !== undefined ? Number(prepTime) : "",
         difficulty: difficulty || "",
         cost: cost !== undefined ? Number(cost) : "",
         dietaryTags: dietary ? [...dietary] : [],
@@ -152,16 +160,19 @@ export function updateRecipe(id, username, recipeData) {
         return { success: false, message: "Recipe title cannot be empty" };
     }
 
-    if (ingredients !== undefined && (!Array.isArray(ingredients) || ingredients.length() == 0)) {
+    if (ingredients !== undefined && (!Array.isArray(ingredients) || ingredients.length == 0)) {
         return { success: false, message: "Ingredients cannot be empty" };
     }
 
-    if (instructions !== undefined && !instructions.trim()) {
-        return { success: false, message: "Instructions cannot be empty" };
+    if (cost !== undefined) {
+        const numericCost = Number(cost);
+        if (!Number.isFinite(numericCost) || numericCost <= 0)
+            return { success: false, message: "Cost must be a positive number" };
     }
-
-    if (cost !== undefined && (!Number.isFinite(cost) || cost < 0)) {
-        return { success: false, message: "Cost must be a positive number" };
+    if (prepTime !== undefined) {
+        const numericPrep = Number(prepTime);
+        if (!Number.isFinite(numericPrep) || numericPrep <= 0)
+            return { success: false, message: "Prep time must be a positive number" };
     }
 
     if (difficulty !== undefined && !Object.values(difficultyLevels).includes(difficulty)) {
@@ -175,9 +186,9 @@ export function updateRecipe(id, username, recipeData) {
         }
 
     if (title !== undefined) recipe.title = title.trim();
-    if (ingredients !== undefined) recipe.ingredients = ingredients;
+    if (ingredients !== undefined) recipe.ingredients = [...ingredients];
     if (instructions !== undefined) recipe.instructions = instructions.trim();
-    if (prepTime !== undefined) recipe.prepTime = prepTime;
+    if (prepTime !== undefined) recipe.prepTime = Number(prepTime);
     if (difficulty !== undefined) recipe.difficulty = difficulty;
     if (dietary !== undefined) recipe.dietaryTags = [...dietary];
     if (cost !== undefined) recipe.cost = Number(cost);
@@ -202,3 +213,71 @@ export function deleteRecipe(id, username) {
     return { success: true, message: "Recipe deleted successfully" };
 }
 
+export function filterRecipes(filterCriteria) {
+
+    const filter = {
+        ingredients : filterCriteria["ingredients"] || undefined,
+        instructions : filterCriteria["instructions"] || undefined,
+        prepTime : filterCriteria["prepTime"] || undefined,
+        difficulty : filterCriteria["difficulty"] || undefined,
+        cost : filterCriteria["cost"] || undefined,
+        dietaryTags : filterCriteria["dietaryTags"] || undefined,
+    }
+
+    const {ingredients, instructions, prepTime, difficulty, cost, dietaryTags} = filter;
+
+    return recipes.filter(recipe => {
+        if (ingredients) {
+            for (const ingredient of ingredients) {
+                if (!recipe.ingredients.some(
+                    ing => ing.trim().toLowerCase() === ingredient.trim().toLowerCase()
+                )) {
+                    return false;
+                }
+            }
+        }
+
+        if (instructions) {
+            if (!recipe.instructions
+                .toLowerCase()
+                .includes(instructions.toLowerCase())) {
+                return false;
+            }
+        }
+
+        const numericPrep = prepTime !== undefined ? Number(prepTime) : undefined;
+        const numericCost = cost !== undefined ? Number(cost) : undefined;
+
+        if (numericPrep && recipe.prepTime > numericPrep) {
+            return false
+        }
+        if (difficulty && getDifficultyLevel(recipe.difficulty) > getDifficultyLevel(difficulty)) {
+            return false
+        }
+        if (numericCost && recipe.cost > numericCost) {
+            return false
+        }
+        if (dietaryTags) {
+            for (const tag of dietaryTags) {
+                if (!recipe.dietaryTags.some(t => t.trim() === tag.trim())) return false;
+            }
+        }
+
+        return true;
+    })
+}
+
+function getDifficultyLevel(difficulty) {
+    switch(difficulty) {
+        case "Easy":
+            return 0
+        case "Medium":
+            return 1
+        case "Hard":
+            return 2
+        case "Hell":
+            return 3
+    }
+
+    return -1;
+}
