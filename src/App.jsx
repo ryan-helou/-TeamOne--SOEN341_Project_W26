@@ -5,6 +5,7 @@ import Register from './Register'
 import ProfileView from './ProfileView'
 import ProfileEdit from './ProfileEdit'
 import ChangePassword from './ChangePassword'
+import RecipesPage from './RecipesPage'
 
 function ProfilePage() {
   const [view, setView] = useState('view')
@@ -46,6 +47,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/recipes" element={<RecipesPage />} />
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>

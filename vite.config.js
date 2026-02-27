@@ -13,7 +13,14 @@ export default defineConfig({
       '/update-profile': 'http://localhost:3000',
       '/change-password': 'http://localhost:3000',
       '/user': 'http://localhost:3000',
-      '/recipes': 'http://localhost:3000',
+      '/recipes': {
+        target: 'http://localhost:3000',
+        bypass(req) {
+          if (req.headers.accept?.includes('text/html')) {
+            return '/index.html'
+          }
+        }
+      },
     }
   }
 })
