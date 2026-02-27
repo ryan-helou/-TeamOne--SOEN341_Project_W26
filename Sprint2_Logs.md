@@ -1,21 +1,29 @@
 **Anish Mehra - 40305592**
 
-Backend Development:
-- Understood the existing code.
-- Implemented user registration endpoint with password validation, added error handling to login endpoint, enhanced     authentication logic. 
- Time: 2 hours 
+Backend Development (Story #8 - Create Recipe):
+- Created RecipeManagement.js with loadRecipes, saveRecipes, getRecipe, getAllRecipes, getRecipesByUser, and addRecipe functions
+- Added POST /recipes, GET /recipes, and GET /recipes/mine routes to Server.js
+- Implemented recipe data validation (title, ingredients, instructions, prepTime, cost, difficulty, dietary tags)
+- Set up JSON file-based persistence for recipe data (recipe_data.json)
+Time: 2 hours
 
-Frontend Development:
-- Fixed UI centering issues, updated App.jsx with proper state management for ProfilePage, integrated ProfileEdit and ChangePassword components
-- Fixed layout issues in index.css and App.css, implemented flexbox centering for login and profile pages
-- Fixed layout issues in index.css and App.css, implemented flexbox centering for login and profile pages
- Time Spent: 1.5 hours
+Backend Development (Story #9 - Edit & Delete Recipe):
+- Implemented updateRecipe and deleteRecipe functions in RecipeManagement.js
+- Added POST /recipes/:id and DELETE /recipes/:id routes to Server.js
+- Added ownership validation so users can only edit/delete their own recipes
+Time: 1.5 hours
 
-Testing and Debugging: 
-- Tested authentication flow, debugged profile data fetching errors, verified session management
- Time spent: 0.5 hours
+Bug Fixing:
+- Fixed recipe visibility bug where all users' recipes were showing instead of only the logged-in user's recipes (changed fetch endpoint from /recipes to /recipes/mine)
+- Added /recipes proxy with HTML bypass to vite.config.js so React Router works alongside API calls
+Time: 0.5 hours
 
- Total Time: 4 hrs
+CI/CD:
+- Set up GitHub Actions CI pipeline (.github/workflows/ci.yml) with lint and build jobs
+- Fixed ESLint errors across multiple files (removed unused variables) to ensure CI passes
+Time: 1 hour
+
+Total Time: 5 hrs
 
 
 **Ghassan Naja - 40264348**
