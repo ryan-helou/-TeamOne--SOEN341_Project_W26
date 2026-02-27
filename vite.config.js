@@ -25,7 +25,11 @@ export default defineConfig({
       '/recipes/mine': 'http://localhost:3000',
       '/recipes': {
         target: 'http://localhost:3000',
-        bypass: bypassForHtml,
+        bypass(req) {
+          if (req.headers.accept?.includes('text/html')) {
+            return '/index.html'
+          }
+        }
       },
     }
   }

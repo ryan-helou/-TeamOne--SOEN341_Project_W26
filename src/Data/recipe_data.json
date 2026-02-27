@@ -1,83 +1,135 @@
 [
   {
     "id": 1,
-    "title": "T1",
+    "title": "Smash Burger with Special Sauce",
     "ingredients": [
-      "egg",
-      "flour"
+      "80/20 ground beef",
+      "brioche bun",
+      "American cheese",
+      "white onion",
+      "dill pickles",
+      "mayonnaise",
+      "ketchup",
+      "mustard",
+      "smoked paprika",
+      "salt",
+      "black pepper"
     ],
-    "instructions": "mix egg and flour",
-    "prepTime": 8,
+    "instructions": "Divide beef into 3oz balls. Heat cast iron skillet on high until smoking. Place beef ball on skillet and smash flat with a spatula. Season with salt and pepper. Cook 2 minutes until edges are crispy. Flip, add cheese, cook 1 more minute. Mix mayo, ketchup, mustard, and paprika for the sauce. Toast bun. Layer sauce, pickles, onion, patty. Serve immediately.",
+    "prepTime": 15,
     "difficulty": "Easy",
-    "cost": 2.5,
+    "cost": 12,
     "dietaryTags": [
+      "Red Meat",
       "High Protein"
     ],
-    "createdBy": "f1"
+    "createdBy": "user1"
   },
   {
     "id": 2,
-    "title": "T2",
+    "title": "Miso Glazed Salmon",
     "ingredients": [
-      "egg",
-      "sugar"
+      "salmon fillet",
+      "white miso paste",
+      "mirin",
+      "soy sauce",
+      "brown sugar",
+      "sesame oil",
+      "garlic",
+      "ginger",
+      "green onion",
+      "sesame seeds"
     ],
-    "instructions": "mix egg and sugar",
-    "prepTime": 20,
+    "instructions": "Whisk together miso, mirin, soy sauce, brown sugar, and sesame oil to make glaze. Pat salmon dry and coat with glaze. Marinate in fridge for at least 1 hour. Preheat oven to 400F. Sear salmon skin-side down in oven-safe pan for 3 minutes. Transfer to oven and broil 5-6 minutes until caramelized. Garnish with sliced green onion and sesame seeds.",
+    "prepTime": 75,
     "difficulty": "Medium",
-    "cost": 5,
+    "cost": 18,
     "dietaryTags": [
-      "Dessert"
+      "Fish",
+      "High Protein"
     ],
-    "createdBy": "f2"
+    "createdBy": "user2"
   },
   {
     "id": 3,
-    "title": "T3",
+    "title": "Truffle Mushroom Risotto",
     "ingredients": [
-      "fish",
-      "salt"
+      "arborio rice",
+      "mixed mushrooms",
+      "truffle oil",
+      "parmesan cheese",
+      "shallots",
+      "garlic",
+      "dry white wine",
+      "vegetable stock",
+      "butter",
+      "fresh thyme",
+      "salt",
+      "black pepper"
     ],
-    "instructions": "cook fish",
-    "prepTime": 30,
+    "instructions": "Heat stock and keep warm. Saute shallots and garlic in butter until soft. Toast arborio rice 2 minutes. Deglaze with white wine. Add warm stock one ladle at a time, stirring constantly and waiting for absorption before adding more. This takes about 20 minutes. Fold in sauteed mushrooms, parmesan, and a knob of butter. Finish with a drizzle of truffle oil and fresh thyme.",
+    "prepTime": 45,
     "difficulty": "Hard",
-    "cost": 10,
+    "cost": 22,
     "dietaryTags": [
-      "Fish"
+      "Vegetarian"
     ],
-    "createdBy": "f3"
+    "createdBy": "user3"
   },
   {
     "id": 4,
-    "title": "T4",
+    "title": "Beef Wellington",
     "ingredients": [
-      "beef",
-      "salt"
+      "beef tenderloin",
+      "puff pastry",
+      "cremini mushrooms",
+      "prosciutto",
+      "dijon mustard",
+      "shallots",
+      "garlic",
+      "fresh thyme",
+      "egg",
+      "butter",
+      "salt",
+      "black pepper"
     ],
-    "instructions": "cook beef",
-    "prepTime": 40,
-    "difficulty": "Hell",
-    "cost": 15,
+    "instructions": "Sear seasoned tenderloin in a hot pan until browned all over. Brush with dijon mustard and let cool. Blitz mushrooms, shallots, garlic, and thyme into a fine paste (duxelles) and cook until all moisture is gone. Lay prosciutto on plastic wrap, spread duxelles, place beef at edge and roll tightly. Refrigerate 30 minutes. Wrap in puff pastry, brush with egg wash. Score the top. Bake at 425F for 25-30 minutes until golden and internal temp reads 125F for medium rare. Rest 10 minutes before slicing.",
+    "prepTime": 120,
+    "difficulty": "Hard",
+    "cost": 65,
     "dietaryTags": [
-      "Red Meat"
+      "Red Meat",
+      "High Protein"
     ],
-    "createdBy": "f4"
+    "createdBy": "user1"
   },
   {
     "id": 5,
-    "title": "T5",
+    "title": "Avocado & Mango Summer Rolls",
     "ingredients": [
-      "lettuce",
-      "tomato"
+      "rice paper wrappers",
+      "avocado",
+      "mango",
+      "cucumber",
+      "purple cabbage",
+      "fresh mint",
+      "fresh cilantro",
+      "vermicelli noodles",
+      "peanut butter",
+      "lime juice",
+      "soy sauce",
+      "chili flakes",
+      "honey"
     ],
-    "instructions": "mix salad",
-    "prepTime": 5,
-    "difficulty": "Easy",
-    "cost": 1,
+    "instructions": "Cook vermicelli noodles per package, rinse cold. Julienne cucumber, mango, and cabbage. Slice avocado. Soak rice paper in warm water 10 seconds until pliable. Lay flat, add noodles, veggies, avocado, mango, and herbs in the lower third. Fold sides in, roll tightly from bottom up. For dipping sauce, whisk peanut butter, lime juice, soy sauce, chili flakes, and honey with a splash of warm water until smooth.",
+    "prepTime": 25,
+    "difficulty": "Medium",
+    "cost": 14,
     "dietaryTags": [
-      "Vegan"
+      "Vegan",
+      "Low Calories"
     ],
-    "createdBy": "f5"
+    "createdBy": "user2"
   },
   {
     "id": 6,

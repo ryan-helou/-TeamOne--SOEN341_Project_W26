@@ -72,6 +72,9 @@ function ProfileView({ username, onEdit, onChangePassword }) {
       <div className="profile-header">
         <h1>My Profile</h1>
         <div className="profile-actions">
+          <button onClick={() => navigate('/recipes')} className="btn-edit">
+            Recipes
+          </button>
           <button onClick={onEdit} className="btn-edit">
             Edit Profile
           </button>
