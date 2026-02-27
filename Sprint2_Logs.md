@@ -75,26 +75,21 @@ Frontend – Story 9: Edit & Delete Recipes
 **Dani Elbazzal - 40225455**
 
 documentation:
--helped in excel documenatiom
+-helped in documenatiom
 Time: 1:30 
 
 Fronend:
-(profile managemnet)
--Displays user profile information
--Shows avatar, username, full name, diet, allergies, preferences
--Navigation buttons for editing
--Form to edit profile data
--Fields: full name, dietary preferences, allergies, preferences
--Save and cancel buttons
--Password change form
--Validation: 8+ chars, uppercase, lowercase, number
--Current, new, and confirm password field
--Purple gradient design
--Responsive layout (mobile/tablet/desktop)
--Dark and light mode support
--Hover animations
+- Built the main RecipePage interface integrating search, filtering, and a responsive recipe grid.
+- Developed reusable React components: RecipeCard (for grid display), RecipeDetail (for expanded view), and RecipeForm (for create/edit modals).
+- Implemented real-time client-side search and filtering logic (by Prep Time, Difficulty, Cost, and Dietary Tags).
+- Wrote 1200+ lines of custom CSS (RecipeManagement.css) matching the project's design system (glassmorphism/gradients).
+- Wired up full frontend CRUD capabilities (Create, Read, Edit, Delete) to the existing backend API endpoints.
+- Added dynamic UI elements including color-coded difficulty badges, tag pills, and conditional rendering.
+- Resolved Vite proxy routing conflict by adding a bypass function for proper React Router navigation.
+- Added a full-width "Browse Recipes" button to the Profile page and a "Logout" button to the Recipes page.
+- Successfully resolved Git merge conflicts in App.jsx and vite.config.js to integrate the UI into the main branch.
 
-Time: 4 hours
+Time: 5 hours
 
 
 **Angad Malhotra - 40133666**
