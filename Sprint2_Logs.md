@@ -54,7 +54,7 @@ Total time : 5 hours
 **Ryan Helou - 40315563**
 Contribution
 
-### Frontend – Story 8: Create Recipe
+Frontend – Story 8: Create Recipe
 - Added "New Recipe" button  
 - Built recipe creation form (title, ingredients, instructions, prep time, difficulty, cost)  
 - Implemented form validation  
@@ -63,7 +63,7 @@ Contribution
 
 **Time:** 4 hours  
 
-### Frontend – Story 9: Edit & Delete Recipes
+Frontend – Story 9: Edit & Delete Recipes
 - Added "Modify Recipe" button for each recipe  
 - Built edit form with pre-filled data  
 - Sent POST request for updates  
