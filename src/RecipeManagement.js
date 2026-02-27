@@ -83,8 +83,8 @@ export function addRecipe(username, recipeData) {
         return { success: false, message: "Recipe title is required" };
     }
 
-    if (!ingredients || !ingredients.trim()) {
-        return { success: false, message: "Ingredients are required" };
+    if (!ingredients || !Array.isArray(ingredients) || ingredients.length() == 0) {
+        return { success: false, message: "Ingredients are required as list" };
     }
 
     if (!instructions || !instructions.trim()) {
@@ -120,7 +120,7 @@ export function addRecipe(username, recipeData) {
     const recipe = {
         id: nextId++,
         title: title.trim(),
-        ingredients: ingredients.trim(),
+        ingredients: [...ingredients],
         instructions: instructions.trim(),
         prepTime: prepTime || "",
         difficulty: difficulty || "",
@@ -152,7 +152,7 @@ export function updateRecipe(id, username, recipeData) {
         return { success: false, message: "Recipe title cannot be empty" };
     }
 
-    if (ingredients !== undefined && !ingredients.trim()) {
+    if (ingredients !== undefined && (!Array.isArray(ingredients) || ingredients.length() == 0)) {
         return { success: false, message: "Ingredients cannot be empty" };
     }
 
@@ -175,7 +175,7 @@ export function updateRecipe(id, username, recipeData) {
         }
 
     if (title !== undefined) recipe.title = title.trim();
-    if (ingredients !== undefined) recipe.ingredients = ingredients.trim();
+    if (ingredients !== undefined) recipe.ingredients = ingredients;
     if (instructions !== undefined) recipe.instructions = instructions.trim();
     if (prepTime !== undefined) recipe.prepTime = prepTime;
     if (difficulty !== undefined) recipe.difficulty = difficulty;
