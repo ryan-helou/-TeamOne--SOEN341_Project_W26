@@ -213,9 +213,11 @@ export function deleteRecipe(id, username) {
     return { success: true, message: "Recipe deleted successfully" };
 }
 
+/// Filter recipes based on filterCriteria. title, ingredients, instructions, prepTime, difficulty, cost, dietaryTags
 export function filterRecipes(filterCriteria) {
 
     const filter = {
+        title : filterCriteria["title"] || undefined,
         ingredients : filterCriteria["ingredients"] || undefined,
         instructions : filterCriteria["instructions"] || undefined,
         prepTime : filterCriteria["prepTime"] || undefined,
@@ -224,9 +226,16 @@ export function filterRecipes(filterCriteria) {
         dietaryTags : filterCriteria["dietaryTags"] || undefined,
     }
 
-    const {ingredients, instructions, prepTime, difficulty, cost, dietaryTags} = filter;
+    const {title, ingredients, instructions, prepTime, difficulty, cost, dietaryTags} = filter;
 
     return recipes.filter(recipe => {
+        if (title) {
+            if (!recipe.title
+                .toLowerCase()
+                .includes(title.toLowerCase()))
+                    return false
+        }
+        
         if (ingredients) {
             for (const ingredient of ingredients) {
                 if (!recipe.ingredients.some(
@@ -257,7 +266,7 @@ export function filterRecipes(filterCriteria) {
         if (numericCost && recipe.cost > numericCost) {
             return false
         }
-        if (dietaryTags) {
+        if (dietaryTags && recipe.dietaryTags) {
             for (const tag of dietaryTags) {
                 if (!recipe.dietaryTags.some(t => t.trim() === tag.trim())) return false;
             }
