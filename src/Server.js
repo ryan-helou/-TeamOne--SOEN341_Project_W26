@@ -136,6 +136,7 @@ app.post("/recipes/filter", (req, res) => {
         ingredients : Array.isArray(req.body.ingredients)
             ? req.body.ingredients
             : req.body.ingredients ? [req.body.ingredients] : undefined,
+        instructions: req.body.instructions || undefined,
         prepTime: req.body.prepTime ? Number(req.body.prepTime) : undefined,
         difficulty: req.body.difficulty || undefined,
         cost: req.body.cost ? Number(req.body.cost) : undefined,
