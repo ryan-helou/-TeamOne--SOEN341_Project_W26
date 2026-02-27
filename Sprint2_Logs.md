@@ -93,17 +93,22 @@ Time: 5 hours
 Back end development & data persistence
 Total 4 hours
 
-API endpoint creation (1 hour)
-Developed scure POST routes in Node.js (/update-profile and /change-password) to handle incoming data from the frontend
+Backend Development & API Refinement
+Total: 4 hours
 
-Business logic implementation (2 hours)
-- Wrote validation logic to ensure "New Password" and "Confirm Password" fields match
-- Integrated session-based authentication to ensure users can only update their own profiles
-- Implemented "Old Password" verification to add layer of security before allowing credential changes
+API Endpoint Optimization (1 hour):
+- Refined the /recipes/filter POST route in Server.js to support dynamic query modification
+- Implemented || undefined logic to allow the frontend to reset or partially modify filters w
+ithout sending stale data
 
-Data persistence (0.5 hours):
-Created a saving mechanism in UserManagement.js that uses fs.writeFileSync to ensure user upd
-ates are permanently stored in the JSON database
+Data Normalization (1.5 hours):
+- Added Number() casting for prepTime and cost to ensure string data from forms is processed
+as integers
+- Synchronized filterCriteria with RecipeManagement.js to ensure "Instructions" are fully sup
+ported
 
-Reponse handling (0.5 hours):
-Developed a standardized JSON response system (returning success: booleon and message: string) to provide clear feedback to the frontend and the end-user
+System Integration (1 hour):
+- Merged main into the feature branch to resolve divergence and ensure compatibility with new
+ React UI updates
+- Validated the full-stack environment locally, ensuring Node.js and Vite communication is st
+able
