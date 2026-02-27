@@ -75,7 +75,7 @@ function RecipePage() {
         setLoading(true)
         setError('')
         try {
-            const res = await fetch('/recipes')
+            const res = await fetch('/recipes/mine')
             const data = await res.json()
             setAllRecipes(data)
         } catch (err) {

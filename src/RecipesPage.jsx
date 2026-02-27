@@ -125,7 +125,7 @@ function RecipesPage() {
   const fetchRecipes = async () => {
     setLoading(true)
     try {
-      const res = await fetch('/recipes')
+      const res = await fetch('/recipes/mine')
       const data = await res.json()
       setRecipes(data)
     } catch {
