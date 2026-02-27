@@ -52,26 +52,25 @@ Total time : 5 hours
 
 
 **Ryan Helou - 40315563**
-Contribution:
+Contribution
 
-Login Page:
-- Designed the UI for the log in page with username, password, and forget password.
-- Implemented the log in page
-- Displayed error messages if conditions were not met
-Time: 1:30
+### Frontend – Story 8: Create Recipe
+- Added "New Recipe" button  
+- Built recipe creation form (title, ingredients, instructions, prep time, difficulty, cost)  
+- Implemented form validation  
+- Sent POST request to backend  
+- Updated UI with confirmation notification and displayed new recipe  
 
-Registration Page:
-- Designed the UI for the registration page (username, password, retype password)
-- Implemented the registration page
-- Displayed error messages if conditions were not met (including password and username conditions)
-Time: 1:30
+**Time:** 4 hours  
 
-Fixed a bug where page was not loading correct components and css values:
-Time: 30 minutes
+### Frontend – Story 9: Edit & Delete Recipes
+- Added "Modify Recipe" button for each recipe  
+- Built edit form with pre-filled data  
+- Sent POST request for updates  
+- Implemented delete functionality  
+- Updated UI with confirmation and refreshed recipe list  
 
-Logout:
-- Designed and implemented log out button information
-
+**Time:** 5 hours  
 
 **Dani Elbazzal - 40225455**
 
