@@ -129,22 +129,23 @@ app.post("/recipes/filter", (req, res) => {
     if (!req.session.username)
         return res.send({ success: false, message: "Session expired" });
 
-    const userRecipes = getRecipesByUser(req.session.username);
+    const allRecipes = getAllRecipes();
+
     const filterCriteria = {
         title : req.body.title || undefined,
         ingredients : Array.isArray(req.body.ingredients)
             ? req.body.ingredients
             : req.body.ingredients ? [req.body.ingredients] : undefined,
         instructions: req.body.instructions || undefined,
-        prepTime: req.body.prepTime || undefined,
+        prepTime: req.body.prepTime ? Number(req.body.prepTime) : undefined,
         difficulty: req.body.difficulty || undefined,
-        cost: req.body.cost || undefined,
+        cost: req.body.cost ? Number(req.body.cost) : undefined,
         dietaryTags : Array.isArray(req.body.dietaryTags)
             ? req.body.dietaryTags
             : req.body.dietaryTags ? [req.body.dietaryTags] : undefined,
     }
 
-    res.send({ success: true, recipes: filterRecipes(userRecipes, filterCriteria) });
+    res.send({ success: true, recipes: filterRecipes(allRecipes, filterCriteria) });
 });
 
 app.listen(PORT, () => {
