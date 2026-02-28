@@ -1,5 +1,5 @@
 **Anish Mehra - 40305592**
-hello
+
 Backend Development:
 - Understood the existing code.
 - Implemented user registration endpoint with password validation, added error handling to login endpoint, enhanced     authentication logic. 
