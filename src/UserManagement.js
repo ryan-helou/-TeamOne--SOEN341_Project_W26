@@ -208,7 +208,7 @@ export function getFriends(username) {
 }
 
 /// Returns a list of username strings for the incoming friend requests of the user
-function  getFriendRequests(username) {
+export function  getFriendRequests(username) {
     let u = getUser(username);
     if (!u)
         return undefined;
@@ -217,7 +217,7 @@ function  getFriendRequests(username) {
 }
 
 /// Send a friend request from a user to another
-function sendFriendRequest(from, to) {
+export function sendFriendRequest(from, to) {
 
     from = String(from)
     to = String(to)
@@ -231,14 +231,19 @@ function sendFriendRequest(from, to) {
     if (!toUser || !fromUser)
         return;
 
-    if (toUser["friends"].find(friend => friend === from) || toUser["pendingFriends"].find(friend => friend === from))
-        return;
+    if (toUser["friends"].includes(from))
+        return "already friends";
+    if (toUser["pendingFriends"].include(from))
+        return "already sent"
     
     toUser["pendingFriends"].push(from);
+
+    saveUsers();
+    return "success"
 }
 
 /// Accept an incoming friend request from a user to another
-function acceptFriendRequest(from, to) {
+export function acceptFriendRequest(from, to) {
     from = String(from)
     to = String(to)
 
@@ -247,6 +252,9 @@ function acceptFriendRequest(from, to) {
 
     let fromUser = getUser(from)
     let toUser = getUser(to)
+
+    if (!toUser.pendingFriends.includes(from))
+        return;
 
     if (!toUser || !fromUser)
         return;
@@ -255,7 +263,7 @@ function acceptFriendRequest(from, to) {
 }
 
 /// Decline a friend request
-function declineFriendRequest(from, to) {
+export function declineFriendRequest(from, to) {
     from = String(from)
     to = String(to)
 
@@ -267,8 +275,10 @@ function declineFriendRequest(from, to) {
     if (!toUser)
         return;
 
-    toUser.friend = toUser.friends.filter(friend => friend !== from);
+    toUser.friends = toUser.friends.filter(friend => friend !== from);
     toUser.pendingFriends = toUser.pendingFriends.filter(friend => friend !== from);
+
+    saveUsers()
 }
 
 /// Make 2 users friends
@@ -282,7 +292,7 @@ function makeFriends(user1, user2) {
     let us1 = getUser(user1)
     let us2 = getUser(user2)
 
-    if (!user1 || !user2)
+    if (!us1 || !us2)
         return;
 
     if (!us1.friends.find(friend => friend === user2)) {
@@ -293,6 +303,8 @@ function makeFriends(user1, user2) {
         us2.friends.push(user1)
         us2.pendingFriends = us2.pendingFriends.filter(friend => friend !== user1)
     }
+
+    saveUsers()
 }
 
 export function testUserDatabase() {

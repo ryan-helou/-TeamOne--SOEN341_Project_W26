@@ -294,7 +294,7 @@ function getDifficultyLevel(difficulty) {
 }
 
 /// Get the recipes of the user's friends
-function getFriendRecipes(username) {
+export function getFriendRecipes(username) {
 
     let friends = getFriends(String(username))
     if (!friends)
