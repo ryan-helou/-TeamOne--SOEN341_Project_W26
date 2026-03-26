@@ -13,7 +13,9 @@ const referenceUser = {
     password : "hello123",
     diet : "likes food",
     allergies : "Idiot",
-    preferences : "Imbecile"
+    preferences : "Imbecile",
+    friends : [],
+    pendingFriends : []
 }
 
 let users = []
@@ -187,9 +189,122 @@ export function getUserAttribute(key, username) {
 function validateUser(user) {
     for (const key of Object.keys(referenceUser)) {
         if (!(key in user)) {
-            user[key] = referenceUser[key];
+            if (Array.isArray(referenceUser[key]))
+                user[key] = [...referenceUser[key]]
+
+            else
+                user[key] = referenceUser[key];
         }
     }
+}
+
+/// Returns a list of username strings for the friends of the user
+export function getFriends(username) {
+    let u = users.find(user => user["username"] == username);
+    if (!u)
+        return undefined;
+
+    return [...u["friends"]]
+}
+
+/// Returns a list of username strings for the incoming friend requests of the user
+export function  getFriendRequests(username) {
+    let u = getUser(username);
+    if (!u)
+        return undefined;
+
+    return [...u["pendingFriends"]]
+}
+
+/// Send a friend request from a user to another
+export function sendFriendRequest(from, to) {
+
+    from = String(from)
+    to = String(to)
+
+    if (from === to)
+        return
+
+    let fromUser = getUser(from)
+    let toUser = getUser(to)
+
+    if (!toUser || !fromUser)
+        return;
+
+    if (toUser["friends"].includes(from))
+        return "already friends";
+    if (toUser["pendingFriends"].includes(from))
+        return "already sent"
+    
+    toUser["pendingFriends"].push(from);
+
+    saveUsers();
+    return "success"
+}
+
+/// Accept an incoming friend request from a user to another
+export function acceptFriendRequest(from, to) {
+    from = String(from)
+    to = String(to)
+
+    if (from === to)
+        return
+
+    let fromUser = getUser(from)
+    let toUser = getUser(to)
+
+    if (!toUser.pendingFriends.includes(from))
+        return;
+
+    if (!toUser || !fromUser)
+        return;
+
+    makeFriends(from, to)
+}
+
+/// Decline a friend request
+export function declineFriendRequest(from, to) {
+    from = String(from)
+    to = String(to)
+
+    if (from === to)
+        return
+
+    let toUser = getUser(to)
+
+    if (!toUser)
+        return;
+
+    toUser.friends = toUser.friends.filter(friend => friend !== from);
+    toUser.pendingFriends = toUser.pendingFriends.filter(friend => friend !== from);
+
+    saveUsers()
+}
+
+/// Make 2 users friends
+function makeFriends(user1, user2) {
+    user1 = String(user1)
+    user2 = String(user2)
+
+    if (user1 === user2)
+        return
+
+    let us1 = getUser(user1)
+    let us2 = getUser(user2)
+
+    if (!us1 || !us2)
+        return;
+
+    if (!us1.friends.find(friend => friend === user2)) {
+        us1.friends.push(user2)
+        us1.pendingFriends = us1.pendingFriends.filter(friend => friend !== user2)
+    }
+    if (!us2.friends.find(friend => friend === user1)) {
+        us2.friends.push(user1)
+        us2.pendingFriends = us2.pendingFriends.filter(friend => friend !== user1)
+    }
+
+    saveUsers()
 }
 
 export function testUserDatabase() {

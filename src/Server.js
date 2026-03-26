@@ -2,8 +2,8 @@ import express from 'express';
 import session from 'express-session';
 //import { testUserDatabase } from "./UserManagement.js";
 
-import { loadUsers, saveUsers, getUserAttribute, registerUser, loginUser, updateUser, changePassword } from "./UserManagement.js";
-import { loadRecipes, addRecipe, getAllRecipes, getRecipesByUser, updateRecipe, deleteRecipe } from "./RecipeManagement.js";
+import { loadUsers, saveUsers, getUserAttribute, registerUser, loginUser, updateUser, changePassword, getFriends, getFriendRequests, sendFriendRequest, acceptFriendRequest, declineFriendRequest } from "./UserManagement.js";
+import { loadRecipes, addRecipe, getAllRecipes, getRecipesByUser, updateRecipe, deleteRecipe, filterRecipes, getFriendRecipes } from "./RecipeManagement.js";
 import { loadMealPlans, createMealPlan, getMealPlansByUser, updateMealPlan, deleteMealPlan } from "./MealPlanManagement.js";
 
 const app = express();
@@ -125,6 +125,130 @@ app.get("/recipes/mine", (req, res) => {
         return res.send({ success: false, message: "Session expired" });
     }
     return res.send(getRecipesByUser(req.session.username));
+});
+
+app.get("/recipes/friends", (req, res) => {
+    if (!req.session.username)
+        return res.send({ success: false, message: "Session expired" });
+
+    const friendRecipes = getFriendRecipes(req.session.username)
+
+    if (!Array.isArray(friendRecipes))
+        return res.send({ success: false, message: "An error occurred" });
+
+    return res.send({ success: true, recipes: friendRecipes });
+});
+
+app.get("/recipes/all", (req, res) => {
+    if (!req.session.username)
+        return res.send({ success: false, message: "Session expired" });
+
+    const friendRecipes = getFriendRecipes(req.session.username)
+    const myRecipes = getRecipesByUser(req.session.username)
+
+    if (!Array.isArray(friendRecipes) || !Array.isArray(myRecipes))
+        return res.send({ success: false, message: "An error occurred" });
+
+    const allRecipes = [...myRecipes, ...friendRecipes];
+
+    return res.send({ success: true, recipes: allRecipes });
+});
+
+app.post("/recipes/filter", (req, res) => {
+    if (!req.session.username)
+        return res.send({ success: false, message: "Session expired" });
+
+    const scope = req.body.scope ? String(req.body.scope) : "all"
+    let recipes;
+    if (scope === "mine")
+        recipes = getRecipesByUser(req.session.username)
+    else if (scope === "friends")
+        recipes = getFriendRecipes(req.session.username)
+    else if (recipes === "all")
+        recipes = [...getRecipesByUser(req.session.username), ...getFriendRecipes(req.session.username)]
+    else
+        recipes = getRecipesByUser(req.session.username);
+
+    const filterCriteria = {
+        title: req.body.title || undefined,
+        ingredients: Array.isArray(req.body.ingredients)
+            ? req.body.ingredients
+            : req.body.ingredients ? [req.body.ingredients] : undefined,
+        instructions: req.body.instructions || undefined,
+        prepTime: req.body.prepTime ? Number(req.body.prepTime) : undefined,
+        difficulty: req.body.difficulty || undefined,
+        cost: req.body.cost ? Number(req.body.cost) : undefined,
+        dietaryTags: Array.isArray(req.body.dietaryTags)
+            ? req.body.dietaryTags
+            : req.body.dietaryTags ? [req.body.dietaryTags] : undefined,
+    }
+
+    res.send({ success: true, recipes: filterRecipes(recipes, filterCriteria) });
+});
+
+app.get("/friends/", (req, res) => {
+    if (!req.session.username)
+        return res.send({ success: false, message: "Session expired" });
+
+    const userFriends = getFriends(req.session.username);
+    if (!Array.isArray(userFriends))
+        return res.send({ success: false, message: "An error occurred" });
+
+    res.send({ success: true, friends: userFriends });
+});
+
+app.get("/friends/requests", (req, res) => {
+    if (!req.session.username)
+        return res.send({ success: false, message: "Session expired" });
+
+    const friendRequests = getFriendRequests(req.session.username);
+    if (!Array.isArray(friendRequests))
+        return res.send({ success: false, message: "An error occurred" });
+
+    res.send({ success: true, requests: friendRequests });
+});
+
+app.post("/send-friend-request", (req, res) => {
+    const recipient = req.body.recipient;
+
+    if (!req.session.username || !recipient)
+        return res.send({ success: false, message: "Session expired" });
+
+    const result = sendFriendRequest(req.session.username, recipient)
+    if (result === "already friends" || result === "already sent")
+        return res.send({ success: false, message: result });
+    if (!result)
+        return res.send({ success: false, message: "An error occurred" });
+
+    res.send({ success: true });
+});
+
+app.post("/accept-pending-request", (req, res) => {
+    const from = req.body.from;
+    const to = req.session.username
+
+    if (!to)
+        return res.send({ success: false, message: "An error occurred" });
+    if (!from)
+        return res.send({ success: false, message: "Session expired" });
+
+    acceptFriendRequest(from, to)
+
+    res.send({ success: true });
+});
+
+app.post("/decline-pending-request", (req, res) => {
+    const from = req.body.from;
+    const to = req.session.username
+
+    if (!to)
+        return res.send({ success: false, message: "An error occurred" });
+    if (!from)
+        return res.send({ success: false, message: "Session expired" });
+
+    declineFriendRequest(from, to)
+
+    res.send({ success: true });
 });
 
 // Meal Plan routes

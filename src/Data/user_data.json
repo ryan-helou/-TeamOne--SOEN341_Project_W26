@@ -6,7 +6,9 @@
     "meat": "medium rare",
     "fullName": "Happy Weewee",
     "allergies": "Idiot",
-    "preferences": "Imbecile"
+    "preferences": "Imbecile",
+    "friends": [],
+    "pendingFriends": []
   },
   {
     "username": "user3",
@@ -15,7 +17,9 @@
     "meat": "medium rare",
     "fullName": "Happy Weewee",
     "allergies": "Idiot",
-    "preferences": "Imbecile"
+    "preferences": "Imbecile",
+    "friends": [],
+    "pendingFriends": []
   },
   {
     "username": "user2",
@@ -24,7 +28,9 @@
     "meat": "medium rare",
     "fullName": "Happy Weewee",
     "allergies": "Idiot",
-    "preferences": "Imbecile"
+    "preferences": "Imbecile",
+    "friends": [],
+    "pendingFriends": []
   },
   {
     "username": "lebronjames",
@@ -32,7 +38,9 @@
     "diet": "likes food",
     "fullName": "Happy Weewee",
     "allergies": "Idiot",
-    "preferences": "Imbecile"
+    "preferences": "Imbecile",
+    "friends": [],
+    "pendingFriends": []
   },
   {
     "username": "yoyoyo",
@@ -40,7 +48,9 @@
     "diet": "likes food",
     "fullName": "Happy Weewee",
     "allergies": "Idiot",
-    "preferences": "Imbecile"
+    "preferences": "Imbecile",
+    "friends": [],
+    "pendingFriends": []
   },
   {
     "username": "NewUser",
@@ -48,6 +58,18 @@
     "diet": "likes food",
     "fullName": "Happy Weewee",
     "allergies": "Idiot",
-    "preferences": "Imbecile"
+    "preferences": "Imbecile",
+    "friends": [],
+    "pendingFriends": []
+  },
+  {
+    "username": "TestUser1",
+    "password": "Password123",
+    "fullName": "Happy Weewee",
+    "diet": "likes food",
+    "allergies": "Idiot",
+    "preferences": "Imbecile",
+    "friends": [],
+    "pendingFriends": []
   }
 ]
