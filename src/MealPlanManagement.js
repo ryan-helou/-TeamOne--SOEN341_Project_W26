@@ -55,6 +55,36 @@ export function getMealPlan(id) {
     return mealPlans.find(mp => mp.id === id);
 }
 
+/// Returns a meal plan for a specific week with full recipe details populated
+export function getMealPlanByWeek(username, weekStart) {
+    const mealPlan = mealPlans.find(
+        mp => mp.username === username && mp.weekStart === weekStart
+    );
+
+    if (!mealPlan) {
+        return null;
+    }
+
+    // Populate recipe details for each day
+    const populatedMeals = {};
+    for (const day of DAYS) {
+        const recipeId = mealPlan.meals[day];
+        if (recipeId !== null && recipeId !== undefined) {
+            const recipe = getRecipe(recipeId);
+            populatedMeals[day] = recipe || null;
+        } else {
+            populatedMeals[day] = null;
+        }
+    }
+
+    return {
+        id: mealPlan.id,
+        username: mealPlan.username,
+        weekStart: mealPlan.weekStart,
+        meals: populatedMeals
+    };
+}
+
 /// Creates a new meal plan for a specific week
 export function createMealPlan(username, mealPlanData) {
     const { weekStart, meals } = mealPlanData;

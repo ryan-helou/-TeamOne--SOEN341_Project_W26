@@ -4,7 +4,7 @@ import session from 'express-session';
 
 import { loadUsers, saveUsers, getUserAttribute, registerUser, loginUser, updateUser, changePassword, getFriends, getFriendRequests, sendFriendRequest, acceptFriendRequest, declineFriendRequest } from "./UserManagement.js";
 import { loadRecipes, addRecipe, getAllRecipes, getRecipesByUser, updateRecipe, deleteRecipe, filterRecipes, getFriendRecipes } from "./RecipeManagement.js";
-import { loadMealPlans, createMealPlan, getMealPlansByUser, updateMealPlan, deleteMealPlan } from "./MealPlanManagement.js";
+import { loadMealPlans, createMealPlan, getMealPlansByUser, getMealPlanByWeek, updateMealPlan, deleteMealPlan } from "./MealPlanManagement.js";
 
 const app = express();
 const PORT = 3000;
@@ -265,6 +265,20 @@ app.get("/mealplans", (req, res) => {
         return res.send({ success: false, message: "Session expired" });
     }
     return res.send(getMealPlansByUser(req.session.username));
+});
+
+app.get("/mealplans/week/:weekStart", (req, res) => {
+    if (!req.session.username) {
+        return res.send({ success: false, message: "Session expired" });
+    }
+    const weekStart = req.params.weekStart;
+    const mealPlan = getMealPlanByWeek(req.session.username, weekStart);
+
+    if (!mealPlan) {
+        return res.send({ success: true, mealPlan: null });
+    }
+
+    return res.send({ success: true, mealPlan });
 });
 
 app.post("/mealplans/:id", (req, res) => {

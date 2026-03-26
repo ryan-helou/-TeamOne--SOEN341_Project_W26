@@ -25,6 +25,7 @@ export default defineConfig({
           }
         }
       },
+      '/mealplans/week': 'http://localhost:3000',
       '/mealplans': 'http://localhost:3000',
       '/friends': 'http://localhost:3000',
       '/send-friend-request': 'http://localhost:3000',
