@@ -156,7 +156,16 @@ app.post("/recipes/filter", (req, res) => {
     if (!req.session.username)
         return res.send({ success: false, message: "Session expired" });
 
-    const allRecipes = getAllRecipes();
+    const scope = req.body.scope ? String(req.body.scope) : "all"
+    let recipes;
+    if (scope === "mine")
+        recipes = getRecipesByUser(req.session.username)
+    else if (scope === "friends")
+        recipes = getFriendRecipes(req.session.username)
+    else if (recipes === "all")
+        recipes = [...getRecipesByUser(req.session.username), ...getFriendRecipes(req.session.username)]
+    else
+        recipes = getRecipesByUser(req.session.username);
 
     const filterCriteria = {
         title : req.body.title || undefined,
@@ -172,7 +181,7 @@ app.post("/recipes/filter", (req, res) => {
             : req.body.dietaryTags ? [req.body.dietaryTags] : undefined,
     }
 
-    res.send({ success: true, recipes: filterRecipes(allRecipes, filterCriteria) });
+    res.send({ success: true, recipes: filterRecipes(recipes, filterCriteria) });
 });
 
 app.get("/friends/", (req, res) => {
@@ -239,8 +248,6 @@ app.post("/decline-pending-request", (req, res) => {
 
     res.send({ success: true });
 });
-
-
 
 app.listen(PORT, () => {
 
