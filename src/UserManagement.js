@@ -233,7 +233,7 @@ export function sendFriendRequest(from, to) {
 
     if (toUser["friends"].includes(from))
         return "already friends";
-    if (toUser["pendingFriends"].include(from))
+    if (toUser["pendingFriends"].includes(from))
         return "already sent"
     
     toUser["pendingFriends"].push(from);
