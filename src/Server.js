@@ -4,11 +4,13 @@ import session from 'express-session';
 
 import { loadUsers, saveUsers, getUserAttribute, registerUser, loginUser, updateUser, changePassword, getFriends, getFriendRequests, sendFriendRequest, acceptFriendRequest, declineFriendRequest } from "./UserManagement.js";
 import { loadRecipes, addRecipe, getAllRecipes, getRecipesByUser, updateRecipe, deleteRecipe, filterRecipes, getFriendRecipes } from "./RecipeManagement.js";
+import { loadMealPlans, getMealPlan, assignMeal, removeMeal, getWeekStart } from "./MealPlanManagement.js";
 
 const app = express();
 const PORT = 3000;
 loadUsers();
 loadRecipes();
+loadMealPlans();
 
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
@@ -247,6 +249,45 @@ app.post("/decline-pending-request", (req, res) => {
     declineFriendRequest(from, to)
 
     res.send({ success: true });
+});
+
+// ---- Meal Plan Routes ----
+
+app.get("/meal-plan", (req, res) => {
+    if (!req.session.username)
+        return res.send({ success: false, message: "Session expired" });
+
+    const weekParam = req.query.week; // expected: "YYYY-MM-DD"
+    if (!weekParam)
+        return res.send({ success: false, message: "Missing week parameter" });
+
+    const weekStart = getWeekStart(weekParam);
+    const plan = getMealPlan(req.session.username, weekStart);
+    return res.send({ success: true, plan });
+});
+
+app.post("/meal-plan", (req, res) => {
+    if (!req.session.username)
+        return res.send({ success: false, message: "Session expired" });
+
+    const { weekStart, day, mealType, recipeId } = req.body;
+    if (!weekStart || !day || !mealType || recipeId === undefined)
+        return res.send({ success: false, message: "Missing required fields" });
+
+    const result = assignMeal(req.session.username, weekStart, day, mealType, Number(recipeId));
+    return res.send(result);
+});
+
+app.delete("/meal-plan", (req, res) => {
+    if (!req.session.username)
+        return res.send({ success: false, message: "Session expired" });
+
+    const { weekStart, day, mealType } = req.body;
+    if (!weekStart || !day || !mealType)
+        return res.send({ success: false, message: "Missing required fields" });
+
+    const result = removeMeal(req.session.username, weekStart, day, mealType);
+    return res.send(result);
 });
 
 app.listen(PORT, () => {
