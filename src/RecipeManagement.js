@@ -7,6 +7,8 @@ const dir = path.dirname(file_name);
 
 const data_path = path.join(dir, "Data", "recipe_data.json");
 
+import { getFriends } from "./UserManagement.js";
+
 let recipes = []
 let nextId = 1
 
@@ -289,4 +291,14 @@ function getDifficultyLevel(difficulty) {
     }
 
     return -1;
+}
+
+/// Get the recipes of the user's friends
+export function getFriendRecipes(username) {
+
+    let friends = getFriends(String(username))
+    if (!friends)
+        return
+
+    return recipes.filter(recipe => friends.includes(recipe.createdBy));
 }
