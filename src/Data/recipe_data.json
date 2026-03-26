@@ -146,5 +146,39 @@
       "Vegetarian"
     ],
     "createdBy": "TestUser1"
+  },
+    {
+    "id": 7,
+    "title": "Evil soup",
+    "ingredients": [
+      "shrek sauce",
+      "fish"
+    ],
+    "instructions": "Cook everything\nIn a dish",
+    "prepTime": 20,
+    "difficulty": "Hell",
+    "cost": 100,
+    "dietaryTags": [
+      "Vegan",
+      "Fish",
+      "Low Calories"
+    ],
+    "createdBy": "user3"
+  },
+  {
+    "id": 8,
+    "title": "Happy soup",
+    "ingredients": [
+      "Hello"
+    ],
+    "instructions": "A",
+    "prepTime": 10,
+    "difficulty": "Easy",
+    "cost": 20,
+    "dietaryTags": [
+      "Vegan",
+      "Low Calories"
+    ],
+    "createdBy": "user3"
   }
 ]
