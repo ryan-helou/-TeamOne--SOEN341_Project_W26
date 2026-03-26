@@ -14,6 +14,7 @@ export default defineConfig({
       '/change-password': 'http://localhost:3000',
       '/user': 'http://localhost:3000',
       '/recipes': 'http://localhost:3000',
+      '/mealplans': 'http://localhost:3000',
     }
   }
 })

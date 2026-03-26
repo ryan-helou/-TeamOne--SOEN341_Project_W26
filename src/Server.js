@@ -4,11 +4,13 @@ import session from 'express-session';
 
 import { loadUsers, saveUsers, getUserAttribute, registerUser, loginUser, updateUser, changePassword } from "./UserManagement.js";
 import { loadRecipes, addRecipe, getAllRecipes, getRecipesByUser, updateRecipe, deleteRecipe } from "./RecipeManagement.js";
+import { loadMealPlans, createMealPlan, getMealPlansByUser, updateMealPlan, deleteMealPlan } from "./MealPlanManagement.js";
 
 const app = express();
 const PORT = 3000;
 loadUsers();
 loadRecipes();
+loadMealPlans();
 
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
@@ -123,6 +125,40 @@ app.get("/recipes/mine", (req, res) => {
         return res.send({ success: false, message: "Session expired" });
     }
     return res.send(getRecipesByUser(req.session.username));
+});
+
+// Meal Plan routes
+app.post("/mealplans", (req, res) => {
+    if (!req.session.username) {
+        return res.send({ success: false, message: "Session expired" });
+    }
+    const result = createMealPlan(req.session.username, req.body);
+    return res.send(result);
+});
+
+app.get("/mealplans", (req, res) => {
+    if (!req.session.username) {
+        return res.send({ success: false, message: "Session expired" });
+    }
+    return res.send(getMealPlansByUser(req.session.username));
+});
+
+app.post("/mealplans/:id", (req, res) => {
+    if (!req.session.username) {
+        return res.send({ success: false, message: "Session expired" });
+    }
+    const id = parseInt(req.params.id);
+    const result = updateMealPlan(id, req.session.username, req.body);
+    return res.send(result);
+});
+
+app.delete("/mealplans/:id", (req, res) => {
+    if (!req.session.username) {
+        return res.send({ success: false, message: "Session expired" });
+    }
+    const id = parseInt(req.params.id);
+    const result = deleteMealPlan(id, req.session.username);
+    return res.send(result);
 });
 
 app.listen(PORT, () => {
