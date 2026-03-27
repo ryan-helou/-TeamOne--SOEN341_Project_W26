@@ -93,25 +93,16 @@ Total Time: 6 hours
 
 
 **Angad Malhotra - 40133666**
-Back end development & data persistence
-Total 4 hours
 
 Backend Development & API Refinement
-Total: 4 hours
+Total: 2 hours
 
-API Endpoint Optimization (1 hour):
-- Refined the /recipes/filter POST route in Server.js to support dynamic query modification
-- Implemented || undefined logic to allow the frontend to reset or partially modify filters w
-ithout sending stale data
+API Endpoint Verification (1 hour):
+- Reviewed and confirmed POST /mealplans/:id in Server.js covers the Edit functionality, allowing a recipe on a specific day to be swapped by passing the updated meals object in the request body
+- Reviewed and confirmed DELETE /mealplans/:id in Server.js covers the Remove functionality, clearing the meal plan assignment from the JSON data store
 
-Data Normalization (1.5 hours):
-- Added Number() casting for prepTime and cost to ensure string data from forms is processed
-as integers
-- Synchronized filterCriteria with RecipeManagement.js to ensure "Instructions" are fully sup
-ported
+Input Validation & Data Integrity (1 hour):
 
-System Integration (1 hour):
-- Merged main into the feature branch to resolve divergence and ensure compatibility with new
- React UI updates
-- Validated the full-stack environment locally, ensuring Node.js and Vite communication is st
-able
+- Verified updateMealPlan() in MealPlanManagement.js handles null assignment for individual days, enabling single-cell clearing without deleting the entire plan
+- Confirmed ownership checks, recipe existence validation, and user-bound recipe enforcement are in place for both update and delete operations
+- Synchronized branch with main to ensure compatibility with frontend changes being developed by teammates
