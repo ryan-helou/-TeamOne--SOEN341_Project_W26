@@ -76,22 +76,20 @@ Time: 2.5 hours
 
 **Dani Elbazzal - 40225455**
 
-documentation:
--helped in documenatiom
-Time: 1:30 
-
 Fronend:
-- Built the main RecipePage interface integrating search, filtering, and a responsive recipe grid.
-- Developed reusable React components: RecipeCard (for grid display), RecipeDetail (for expanded view), and RecipeForm (for create/edit modals).
-- Implemented real-time client-side search and filtering logic (by Prep Time, Difficulty, Cost, and Dietary Tags).
-- Wrote 1200+ lines of custom CSS (RecipeManagement.css) matching the project's design system (glassmorphism/gradients).
-- Wired up full frontend CRUD capabilities (Create, Read, Edit, Delete) to the existing backend API endpoints.
-- Added dynamic UI elements including color-coded difficulty badges, tag pills, and conditional rendering.
-- Resolved Vite proxy routing conflict by adding a bypass function for proper React Router navigation.
-- Added a full-width "Browse Recipes" button to the Profile page and a "Logout" button to the Recipes page.
-- Successfully resolved Git merge conflicts in App.jsx and vite.config.js to integrate the UI into the main branch.
+-Implemented a 7 Column Grid Layout: Built a dedicated weekly view organizing meals into three distinct rows for Breakfast, Lunch, and Dinner.
+-Added Dynamic Week Navigation: Built navigation controls allowing users to seamlessly browse through their meal plans for any given week.
+-Engineered Recipe Assignment: Created an interactive flow where clicking empty grid cells opens a searchable recipe picker modal to easily assign meals to specific slots.
+-Integrated Detailed Meal Information: Designed interactive filled cells that display full recipe details (ingredients, instructions, cost, prep time) when clicked.
+-Developed "Remove from Plan" Functionality: Provided users the ability to delete meals directly via a '✕' button on the cells or through a dedicated button inside the detail modal.
+-Optimized Responsive Design: Ensured the grid layout and modals adapt gracefully to smaller screens for an accessible mobile and desktop experience.
+-Added "Today" Highlighting: Implemented visual highlighting on the grid interface to dynamically emphasize the current day's column for better user orientation.
 
-Time: 5 hours
+Backend:
+-Enabled Persistent Storage: Integrated backend data saving and loading using meal_plan_data.json to ensure meal plans persist properly across page reloads and sessions.
+
+
+Total Time: 6 hours
 
 
 **Angad Malhotra - 40133666**
