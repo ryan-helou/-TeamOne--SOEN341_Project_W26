@@ -1,29 +1,28 @@
 **Anish Mehra - 40305592**
-hi
-Backend Development (Story #8 - Create Recipe):
-- Created RecipeManagement.js with loadRecipes, saveRecipes, getRecipe, getAllRecipes, getRecipesByUser, and addRecipe functions
-- Added POST /recipes, GET /recipes, and GET /recipes/mine routes to Server.js
-- Implemented recipe data validation (title, ingredients, instructions, prepTime, cost, difficulty, dietary tags)
-- Set up JSON file-based persistence for recipe data (recipe_data.json)
+
+Backend Development (Story #12 - Create Weekly Meal Plan):
+- Built MealPlanManagement.js with loadMealPlans, saveMealPlans, getMealPlan, assignMeal, removeMeal, and getWeekStart functions
+- Implemented weekly meal plan data structure with 7-day grid (Monday-Sunday) and 3 meal slots per day (Breakfast, Lunch, Dinner)
+- Added validation so users can only assign their own or friends' recipes to the meal plan
+- Set up JSON file-based persistence for meal plan data (meal_plan_data.json)
 Time: 2 hours
 
-Backend Development (Story #9 - Edit & Delete Recipe):
-- Implemented updateRecipe and deleteRecipe functions in RecipeManagement.js
-- Added POST /recipes/:id and DELETE /recipes/:id routes to Server.js
-- Added ownership validation so users can only edit/delete their own recipes
+Backend Development (Story #13 - View Meals in Weekly Grid):
+- Added GET /meal-plan route to Server.js to fetch meal plans by user and week
+- Implemented getWeekStart function to compute the Monday of any given week for consistent week-based lookups
+- Added POST /meal-plan and DELETE /meal-plan routes for assigning and removing meals
+- Added /meal-plan and /users/all proxy routes to vite.config.js
 Time: 1.5 hours
 
-Bug Fixing:
-- Fixed recipe visibility bug where all users' recipes were showing instead of only the logged-in user's recipes (changed fetch endpoint from /recipes to /recipes/mine)
-- Added /recipes proxy with HTML bypass to vite.config.js so React Router works alongside API calls
-Time: 0.5 hours
+Unit Testing & CI/CD:
+- Installed Vitest testing framework and added "test" script to package.json
+- Created UserManagement.test.js with 13 unit tests covering all Sprint 1 functions (register, login, authenticate, password change, profile update, friends)
+- Created RecipeManagement.test.js with 8 unit tests covering all Sprint 2 functions (add, update, delete, get, filter, friend recipes)
+- Added test job to CI pipeline (.github/workflows/ci.yml) so tests run automatically on push and PR (lint -> test -> build)
+- Added src/__tests__ to ESLint globalIgnores to prevent lint errors on test files
+Time: 2 hours
 
-CI/CD:
-- Set up GitHub Actions CI pipeline (.github/workflows/ci.yml) with lint and build jobs
-- Fixed ESLint errors across multiple files (removed unused variables) to ensure CI passes
-Time: 1 hour
-
-Total Time: 5 hrs
+Total Time: 5.5 hrs
 
 
 **Ghassan Naja - 40264348**
