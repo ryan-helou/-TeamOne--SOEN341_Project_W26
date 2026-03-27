@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { getRecipe } from "./RecipeManagement.js";
+import { getRecipe, getRecipesByUser, getFriendRecipes } from "./RecipeManagement.js";
 
 const file_name = fileURLToPath(import.meta.url);
 const dir = path.dirname(file_name);
@@ -115,6 +115,14 @@ export function assignMeal(username, weekStart, day, mealType, recipeId) {
     const recipe = getRecipe(recipeId);
     if (!recipe) {
         return { success: false, message: "Recipe not found" };
+    }
+
+    // Validate that the recipe belongs to the user or one of their friends
+    const userRecipes = getRecipesByUser(username);
+    const friendRecipes = getFriendRecipes(username) || [];
+    const allowedRecipeIds = [...userRecipes, ...friendRecipes].map(r => r.id);
+    if (!allowedRecipeIds.includes(recipeId)) {
+        return { success: false, message: "You can only add your own or friends' recipes to the meal plan" };
     }
 
     let plan = mealPlans.find(
