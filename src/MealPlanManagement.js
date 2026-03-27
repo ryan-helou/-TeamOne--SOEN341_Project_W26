@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { getRecipe } from "./RecipeManagement.js";
+import { getRecipe, getRecipesByUser, getFriendRecipes } from "./RecipeManagement.js";
 
 const file_name = fileURLToPath(import.meta.url);
 const dir = path.dirname(file_name);
@@ -92,7 +92,23 @@ export function getMealPlan(username, weekStart) {
         (mp) => mp.username === username && mp.weekStart === weekStart
     );
     if (existing) {
-        return { ...existing };
+        // Resolve current recipe titles so edits are reflected
+        const plan = { ...existing, meals: {} };
+        for (const day of DAYS) {
+            plan.meals[day] = {};
+            for (const type of MEAL_TYPES) {
+                const slot = existing.meals[day]?.[type];
+                if (slot) {
+                    const recipe = getRecipe(slot.recipeId);
+                    plan.meals[day][type] = recipe
+                        ? { recipeId: recipe.id, recipeTitle: recipe.title }
+                        : null;
+                } else {
+                    plan.meals[day][type] = null;
+                }
+            }
+        }
+        return plan;
     }
     // Return a blank plan for this week (it will be persisted on first assignment)
     return {
@@ -115,6 +131,14 @@ export function assignMeal(username, weekStart, day, mealType, recipeId) {
     const recipe = getRecipe(recipeId);
     if (!recipe) {
         return { success: false, message: "Recipe not found" };
+    }
+
+    // Validate that the recipe belongs to the user or one of their friends
+    const userRecipes = getRecipesByUser(username);
+    const friendRecipes = getFriendRecipes(username) || [];
+    const allowedRecipeIds = [...userRecipes, ...friendRecipes].map(r => r.id);
+    if (!allowedRecipeIds.includes(recipeId)) {
+        return { success: false, message: "You can only add your own or friends' recipes to the meal plan" };
     }
 
     let plan = mealPlans.find(
