@@ -92,7 +92,23 @@ export function getMealPlan(username, weekStart) {
         (mp) => mp.username === username && mp.weekStart === weekStart
     );
     if (existing) {
-        return { ...existing };
+        // Resolve current recipe titles so edits are reflected
+        const plan = { ...existing, meals: {} };
+        for (const day of DAYS) {
+            plan.meals[day] = {};
+            for (const type of MEAL_TYPES) {
+                const slot = existing.meals[day]?.[type];
+                if (slot) {
+                    const recipe = getRecipe(slot.recipeId);
+                    plan.meals[day][type] = recipe
+                        ? { recipeId: recipe.id, recipeTitle: recipe.title }
+                        : null;
+                } else {
+                    plan.meals[day][type] = null;
+                }
+            }
+        }
+        return plan;
     }
     // Return a blank plan for this week (it will be persisted on first assignment)
     return {
