@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "username": "user3",
+    "weekStart": "2026-03-24",
+    "meals": {
+      "Monday": null,
+      "Tuesday": null,
+      "Wednesday": null,
+      "Thursday": 3,
+      "Friday": null,
+      "Saturday": null,
+      "Sunday": null
+    }
+  }
+]

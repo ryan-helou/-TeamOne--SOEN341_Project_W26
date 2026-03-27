@@ -205,6 +205,7 @@ function RecipePage() {
 
                 <div className="recipe-topbar-actions">
                     <button className="btn-back" onClick={handleLogout}>🚪 Logout</button>
+                    <Link to="/meal-plan" className="btn-back">📅 Meal Plan</Link>
                     <Link to="/profile" className="btn-back">👤 Profile</Link>
                     {currentUser && (
                         <button
