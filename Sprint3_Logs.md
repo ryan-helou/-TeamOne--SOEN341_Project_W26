@@ -51,23 +51,26 @@ Total : 4hr 30min
 **Ryan Helou - 40315563**
 Contribution
 
-Frontend – Story 8: Create Recipe
-- Added "New Recipe" button  
-- Built recipe creation form (title, ingredients, instructions, prep time, difficulty, cost)  
-- Implemented form validation  
-- Sent POST request to backend  
-- Updated UI with confirmation notification and displayed new recipe  
+Frontend – Story 14: Edit & Remove Meals from Planner
 
-**Time:** 4 hours  
+Added "Edit" and "Remove" options to planner cells
+Implemented edit (swap recipe) and remove (clear + delete) functionality
+Updated grid UI and added confirmation messages
+Time: 3 hours
 
-Frontend – Story 9: Edit & Delete Recipes
-- Added "Modify Recipe" button for each recipe  
-- Built edit form with pre-filled data  
-- Sent POST request for updates  
-- Implemented delete functionality  
-- Updated UI with confirmation and refreshed recipe list  
+Frontend – Story 15: Friend Requests (Unique Feature)
 
-**Time:** 5 hours  
+Built "Find Friends" page
+Added user list, search bar, and send request functionality
+Handled incoming requests with accept/decline options
+Time: 3 hours
+
+Frontend – Story 16: View Friends’ Recipes
+
+Added toggle between personal and friends’ recipes
+Displayed friends’ recipes as view-only
+Handled updates to reflect changes
+Time: 2.5 hours
 
 **Dani Elbazzal - 40225455**
 
