@@ -28,23 +28,26 @@ Total Time: 5.5 hrs
 **Ghassan Naja - 40264348**
 Contribution :
 
-Tested and improved the existing functionality to add, edit and delete recipes.
-	- Changed time and cost fields to beome numeric values
-	- Changed ingredients field to become a list of strings
-	- Ensured the proper behavior of recipeManagement.js, and ensured more robust equality checks
-Time : 2hr
+Added functionality to send and receive friend requests
+	- Ensured users can see the usernames of other users
+	- Ensured users can send requests and receive them
+	- Ensured users can see incoming requests and choose to accept or decline
+	- Ensured friend data persists across sessions
+Time : 1hr 30min
 
-Designed function to filter user recipes based on specific criteria
-	- able to filter based on max price, max prep time, ingredients, instructions, diet tags, difficulty
-	- Implemented functionality to search recipe by title
-	- Ensured that only recipes that belong to the user are shown in the search
-Time : 2hrs
+Added functionality to view the recipes of friends
+	- Ensured the user can toggle between viewing friend recipes and own recipes
+	- Ensured the user can only view friend recipes, not edit them
+	- Ensured data persists across sessions and is updated across all users when changed
+Time : 3hrs
 
-Designed POST requests for the filter recipe
-	- Added /filter, where the user is able to specify search criteria and show the result that fit the criteria
-Time : 30min
+Tested the new features related to friend management
+	- Wrote tests to find bugs and catch bad behavior
+	- Tested edge cases and ensured this feature is well-integrated with the other features
+	- Found and reported 2 bugs related to friend management to be fixed
+Time : 1hr
 
-Total : 4hr 30min
+Total : 5hr 30min
 
 
 **Ryan Helou - 40315563**
