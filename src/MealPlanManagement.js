@@ -1,19 +1,53 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { getRecipe, getRecipesByUser } from "./RecipeManagement.js";
+import { getRecipe } from "./RecipeManagement.js";
 
 const file_name = fileURLToPath(import.meta.url);
 const dir = path.dirname(file_name);
 
-const data_path = path.join(dir, "Data", "mealplan_data.json");
+const data_path = path.join(dir, "Data", "meal_plan_data.json");
 
-let mealPlans = [];
-let nextId = 1;
+/*
+  Data format stored in meal_plan_data.json:
+  [
+    {
+      "username": "user1",
+      "weekStart": "2026-03-23",          // Monday of that week (ISO date string)
+      "meals": {
+        "Monday":    { "Breakfast": null, "Lunch": null, "Dinner": null },
+        "Tuesday":   { "Breakfast": null, "Lunch": null, "Dinner": null },
+        "Wednesday": { "Breakfast": null, "Lunch": null, "Dinner": null },
+        "Thursday":  { "Breakfast": null, "Lunch": null, "Dinner": null },
+        "Friday":    { "Breakfast": null, "Lunch": null, "Dinner": null },
+        "Saturday":  { "Breakfast": null, "Lunch": null, "Dinner": null },
+        "Sunday":    { "Breakfast": null, "Lunch": null, "Dinner": null }
+      }
+    }
+  ]
+
+  Each meal slot is either null (unassigned) or an object:
+  { "recipeId": 3, "recipeTitle": "Truffle Mushroom Risotto" }
+*/
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const MEAL_TYPES = ["Breakfast", "Lunch", "Dinner"];
 
-/// Loads the meal plans from the database
+let mealPlans = [];
+
+/// Creates an empty week template
+function emptyWeekMeals() {
+    const meals = {};
+    for (const day of DAYS) {
+        meals[day] = {};
+        for (const type of MEAL_TYPES) {
+            meals[day][type] = null;
+        }
+    }
+    return meals;
+}
+
+/// Loads meal plans from the JSON file
 export function loadMealPlans() {
     try {
         if (!fs.existsSync(data_path)) {
@@ -27,12 +61,9 @@ export function loadMealPlans() {
         console.log("Error loading meal plan files -", error);
         mealPlans = [];
     }
-    if (mealPlans.length > 0) {
-        nextId = Math.max(...mealPlans.map(mp => mp.id)) + 1;
-    }
 }
 
-/// Saves the meal plans to the database
+/// Saves meal plans to the JSON file
 export function saveMealPlans() {
     try {
         fs.writeFileSync(
@@ -45,168 +76,83 @@ export function saveMealPlans() {
     }
 }
 
-/// Returns all meal plans for a specific user
-export function getMealPlansByUser(username) {
-    return mealPlans.filter(mp => mp.username === username);
+/// Computes the Monday (start of week) for a given date string "YYYY-MM-DD"
+export function getWeekStart(dateStr) {
+    const d = new Date(dateStr + "T00:00:00");
+    const dayOfWeek = d.getDay(); // 0=Sun, 1=Mon, ...
+    const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // shift to Monday
+    d.setDate(d.getDate() + diff);
+    return d.toISOString().slice(0, 10);
 }
 
-/// Returns a meal plan by its id
-export function getMealPlan(id) {
-    return mealPlans.find(mp => mp.id === id);
-}
-
-/// Returns a meal plan for a specific week with full recipe details populated
-export function getMealPlanByWeek(username, weekStart) {
-    const mealPlan = mealPlans.find(
-        mp => mp.username === username && mp.weekStart === weekStart
-    );
-
-    if (!mealPlan) {
-        return null;
-    }
-
-    // Populate recipe details for each day
-    const populatedMeals = {};
-    for (const day of DAYS) {
-        const recipeId = mealPlan.meals[day];
-        if (recipeId !== null && recipeId !== undefined) {
-            const recipe = getRecipe(recipeId);
-            populatedMeals[day] = recipe || null;
-        } else {
-            populatedMeals[day] = null;
-        }
-    }
-
-    return {
-        id: mealPlan.id,
-        username: mealPlan.username,
-        weekStart: mealPlan.weekStart,
-        meals: populatedMeals
-    };
-}
-
-/// Creates a new meal plan for a specific week
-export function createMealPlan(username, mealPlanData) {
-    const { weekStart, meals } = mealPlanData;
-
-    if (!weekStart || !weekStart.trim()) {
-        return { success: false, message: "Week start date is required" };
-    }
-
-    // Check if a meal plan already exists for this week
+/// Returns the meal plan for a given user and week.
+/// If none exists yet, returns a fresh empty plan (but does NOT persist it).
+export function getMealPlan(username, weekStart) {
     const existing = mealPlans.find(
-        mp => mp.username === username && mp.weekStart === weekStart.trim()
+        (mp) => mp.username === username && mp.weekStart === weekStart
     );
     if (existing) {
-        return { success: false, message: "A meal plan already exists for this week" };
+        return { ...existing };
     }
-
-    // Build the meals object — validate that recipe IDs belong to the user
-    const userRecipes = getRecipesByUser(username);
-    const userRecipeIds = userRecipes.map(r => r.id);
-    const weekMeals = {};
-
-    for (const day of DAYS) {
-        if (meals && meals[day] !== undefined && meals[day] !== null) {
-            const recipeId = Number(meals[day]);
-            if (!Number.isFinite(recipeId)) {
-                return { success: false, message: `Invalid recipe ID for ${day}` };
-            }
-            const recipe = getRecipe(recipeId);
-            if (!recipe) {
-                return { success: false, message: `Recipe not found for ${day}` };
-            }
-            if (!userRecipeIds.includes(recipeId)) {
-                return { success: false, message: `You can only add your own recipes to the meal plan` };
-            }
-            weekMeals[day] = recipeId;
-        } else {
-            weekMeals[day] = null;
-        }
-    }
-
-    const mealPlan = {
-        id: nextId++,
+    // Return a blank plan for this week (it will be persisted on first assignment)
+    return {
         username,
-        weekStart: weekStart.trim(),
-        meals: weekMeals
+        weekStart,
+        meals: emptyWeekMeals()
+    };
+}
+
+/// Assigns a recipe to a specific slot. Creates the week entry if it doesn't exist yet.
+export function assignMeal(username, weekStart, day, mealType, recipeId) {
+    if (!DAYS.includes(day)) {
+        return { success: false, message: "Invalid day" };
+    }
+    if (!MEAL_TYPES.includes(mealType)) {
+        return { success: false, message: "Invalid meal type" };
+    }
+
+    // Look up the recipe to store its title alongside the id
+    const recipe = getRecipe(recipeId);
+    if (!recipe) {
+        return { success: false, message: "Recipe not found" };
+    }
+
+    let plan = mealPlans.find(
+        (mp) => mp.username === username && mp.weekStart === weekStart
+    );
+
+    if (!plan) {
+        plan = { username, weekStart, meals: emptyWeekMeals() };
+        mealPlans.push(plan);
+    }
+
+    plan.meals[day][mealType] = {
+        recipeId: recipe.id,
+        recipeTitle: recipe.title
     };
 
-    mealPlans.push(mealPlan);
     saveMealPlans();
-    return { success: true, message: "Meal plan created successfully", mealPlan };
+    return { success: true, message: "Meal assigned", plan };
 }
 
-/// Updates an existing meal plan (only if the user is the owner)
-export function updateMealPlan(id, username, mealPlanData) {
-    const mealPlan = getMealPlan(id);
-    if (!mealPlan) {
-        return { success: false, message: "Meal plan not found" };
+/// Removes a recipe from a specific slot
+export function removeMeal(username, weekStart, day, mealType) {
+    if (!DAYS.includes(day)) {
+        return { success: false, message: "Invalid day" };
+    }
+    if (!MEAL_TYPES.includes(mealType)) {
+        return { success: false, message: "Invalid meal type" };
     }
 
-    if (mealPlan.username !== username) {
-        return { success: false, message: "You can only edit your own meal plans" };
+    const plan = mealPlans.find(
+        (mp) => mp.username === username && mp.weekStart === weekStart
+    );
+
+    if (!plan) {
+        return { success: false, message: "No meal plan found for this week" };
     }
 
-    const { weekStart, meals } = mealPlanData;
-
-    // If changing the week, check for duplicates
-    if (weekStart !== undefined) {
-        if (!weekStart.trim()) {
-            return { success: false, message: "Week start date cannot be empty" };
-        }
-        const existing = mealPlans.find(
-            mp => mp.username === username && mp.weekStart === weekStart.trim() && mp.id !== id
-        );
-        if (existing) {
-            return { success: false, message: "A meal plan already exists for this week" };
-        }
-        mealPlan.weekStart = weekStart.trim();
-    }
-
-    // Update meals if provided
-    if (meals !== undefined) {
-        const userRecipes = getRecipesByUser(username);
-        const userRecipeIds = userRecipes.map(r => r.id);
-
-        for (const day of DAYS) {
-            if (meals[day] !== undefined) {
-                if (meals[day] === null) {
-                    mealPlan.meals[day] = null;
-                } else {
-                    const recipeId = Number(meals[day]);
-                    if (!Number.isFinite(recipeId)) {
-                        return { success: false, message: `Invalid recipe ID for ${day}` };
-                    }
-                    const recipe = getRecipe(recipeId);
-                    if (!recipe) {
-                        return { success: false, message: `Recipe not found for ${day}` };
-                    }
-                    if (!userRecipeIds.includes(recipeId)) {
-                        return { success: false, message: "You can only add your own recipes to the meal plan" };
-                    }
-                    mealPlan.meals[day] = recipeId;
-                }
-            }
-        }
-    }
-
+    plan.meals[day][mealType] = null;
     saveMealPlans();
-    return { success: true, message: "Meal plan updated successfully", mealPlan };
-}
-
-/// Deletes a meal plan (only if the user is the owner)
-export function deleteMealPlan(id, username) {
-    const mealPlan = getMealPlan(id);
-    if (!mealPlan) {
-        return { success: false, message: "Meal plan not found" };
-    }
-
-    if (mealPlan.username !== username) {
-        return { success: false, message: "You can only delete your own meal plans" };
-    }
-
-    mealPlans = mealPlans.filter(mp => mp.id !== id);
-    saveMealPlans();
-    return { success: true, message: "Meal plan deleted successfully" };
+    return { success: true, message: "Meal removed", plan };
 }

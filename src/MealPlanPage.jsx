@@ -3,9 +3,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import './MealPlan.css'
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+const MEAL_TYPES = ['Breakfast', 'Lunch', 'Dinner']
+const MEAL_EMOJI = { Breakfast: '🌅', Lunch: '☀️', Dinner: '🌙' }
 
 /* ── Helpers ────────────────────────────────────── */
 
+/** Return the Monday of the week that contains `date`. */
 function getMonday(date) {
     const d = new Date(date)
     const day = d.getDay()
@@ -14,14 +17,17 @@ function getMonday(date) {
     return d
 }
 
+/** Format a Date as YYYY-MM-DD. */
 function toISO(d) {
     return d.toISOString().slice(0, 10)
 }
 
+/** Format a Date as "Mar 24". */
 function shortDate(d) {
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
+/** Return an array of 7 Date objects starting from monday. */
 function weekDates(monday) {
     return Array.from({ length: 7 }, (_, i) => {
         const d = new Date(monday)
@@ -33,6 +39,10 @@ function weekDates(monday) {
 /* ── Main Component ─────────────────────────────── */
 function MealPlanPage() {
     const navigate = useNavigate()
+    const storedUser = localStorage.getItem('user')
+    const currentUser = storedUser ? JSON.parse(storedUser).username : null
+
+    // Current week anchor (always a Monday)
     const [monday, setMonday] = useState(() => getMonday(new Date()))
     const [plan, setPlan] = useState(null)
     const [recipes, setRecipes] = useState([])
@@ -41,9 +51,8 @@ function MealPlanPage() {
     const [success, setSuccess] = useState('')
 
     // Modal state
-    const [pickerDay, setPickerDay] = useState(null)
-    const [isEditing, setIsEditing] = useState(false)
-    const [detailDay, setDetailDay] = useState(null)
+    const [pickerSlot, setPickerSlot] = useState(null)   // { day, mealType }
+    const [detailSlot, setDetailSlot] = useState(null)    // { day, mealType, recipe }
     const [pickerSearch, setPickerSearch] = useState('')
 
     const weekStart = toISO(monday)
@@ -56,10 +65,10 @@ function MealPlanPage() {
         setLoading(true)
         setError('')
         try {
-            const res = await fetch(`/mealplans/week/${weekStart}`)
+            const res = await fetch(`/meal-plan?week=${weekStart}`)
             const data = await res.json()
             if (data.success) {
-                setPlan(data.mealPlan)
+                setPlan(data.plan)
             } else {
                 setError(data.message || 'Failed to load meal plan')
             }
@@ -78,7 +87,7 @@ function MealPlanPage() {
                 setRecipes(data)
             }
         } catch {
-            // non-critical
+            // recipes list is non-critical
         }
     }, [])
 
@@ -95,34 +104,24 @@ function MealPlanPage() {
     /* ── Actions ────────────────────────────────── */
 
     const handleAssign = async (recipe) => {
-        if (!pickerDay) return
+        if (!pickerSlot) return
         try {
-            let data
-            if (plan) {
-                // Update existing plan
-                const res = await fetch(`/mealplans/${plan.id}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ meals: { [pickerDay]: recipe.id } })
+            const res = await fetch('/meal-plan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    weekStart,
+                    day: pickerSlot.day,
+                    mealType: pickerSlot.mealType,
+                    recipeId: recipe.id
                 })
-                data = await res.json()
-            } else {
-                // Create new plan
-                const res = await fetch('/mealplans', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ weekStart, meals: { [pickerDay]: recipe.id } })
-                })
-                data = await res.json()
-            }
+            })
+            const data = await res.json()
             if (data.success) {
-                setPickerDay(null)
+                setPlan(data.plan)
+                setPickerSlot(null)
                 setPickerSearch('')
-                setIsEditing(false)
-                setSuccess(isEditing
-                    ? `Swapped recipe on ${pickerDay} to "${recipe.title}"`
-                    : `Assigned "${recipe.title}" to ${pickerDay}`)
-                fetchPlan()
+                setSuccess(`Assigned "${recipe.title}" to ${pickerSlot.day} ${pickerSlot.mealType}`)
             } else {
                 setError(data.message || 'Failed to assign meal')
             }
@@ -131,19 +130,18 @@ function MealPlanPage() {
         }
     }
 
-    const handleRemove = async (day) => {
-        if (!plan) return
+    const handleRemove = async (day, mealType) => {
         try {
-            const res = await fetch(`/mealplans/${plan.id}`, {
-                method: 'POST',
+            const res = await fetch('/meal-plan', {
+                method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ meals: { [day]: null } })
+                body: JSON.stringify({ weekStart, day, mealType })
             })
             const data = await res.json()
             if (data.success) {
-                setDetailDay(null)
-                setSuccess(`Removed meal from ${day}`)
-                fetchPlan()
+                setPlan(data.plan)
+                setDetailSlot(null)
+                setSuccess(`Removed meal from ${day} ${mealType}`)
             } else {
                 setError(data.message || 'Failed to remove meal')
             }
@@ -152,14 +150,16 @@ function MealPlanPage() {
         }
     }
 
-    const openPicker = (day, editing) => {
-        setPickerDay(day)
-        setIsEditing(editing)
-        setPickerSearch('')
-    }
-
-    const openDetail = (day) => {
-        setDetailDay(day)
+    const handleCellClick = (day, mealType) => {
+        const meal = plan?.meals?.[day]?.[mealType]
+        if (meal) {
+            // Look up full recipe data if we have it
+            const fullRecipe = recipes.find(r => r.id === meal.recipeId)
+            setDetailSlot({ day, mealType, meal, fullRecipe })
+        } else {
+            setPickerSlot({ day, mealType })
+            setPickerSearch('')
+        }
     }
 
     /* ── Week navigation ────────────────────────── */
@@ -176,6 +176,8 @@ function MealPlanPage() {
     }
     const goToday = () => setMonday(getMonday(new Date()))
 
+    /* ── Logout ─────────────────────────────────── */
+
     const handleLogout = async () => {
         try { await fetch('/logout') } catch { /* noop */ }
         localStorage.removeItem('user')
@@ -187,10 +189,6 @@ function MealPlanPage() {
     const filteredPickerRecipes = recipes.filter(r =>
         r.title.toLowerCase().includes(pickerSearch.toLowerCase())
     )
-
-    /* ── Get recipe for a day ───────────────────── */
-
-    const getMeal = (day) => plan?.meals?.[day] || null
 
     /* ── Render ──────────────────────────────────── */
 
@@ -212,15 +210,15 @@ function MealPlanPage() {
 
             {/* Week Navigator */}
             <div className="week-navigator">
-                <button className="week-nav-btn" onClick={prevWeek}>← Prev</button>
-                <button className="week-nav-btn btn-today" onClick={goToday}>Today</button>
+                <button onClick={prevWeek}>← Prev</button>
+                <button className="btn-today" onClick={goToday}>Today</button>
                 <div className="week-label">
                     Week of {shortDate(monday)}
                     <span className="week-range">
                         {shortDate(dates[0])} – {shortDate(dates[6])}, {dates[6].getFullYear()}
                     </span>
                 </div>
-                <button className="week-nav-btn" onClick={nextWeek}>Next →</button>
+                <button onClick={nextWeek}>Next →</button>
             </div>
 
             {/* Grid */}
@@ -231,59 +229,68 @@ function MealPlanPage() {
                 </div>
             ) : (
                 <div className="meal-grid">
+                    {/* Header row */}
+                    <div className="grid-header corner"></div>
                     {DAYS.map((day, i) => {
                         const dateObj = dates[i]
                         const isToday = toISO(dateObj) === todayISO
-                        const meal = getMeal(day)
-
                         return (
-                            <div key={day} className={`meal-day ${isToday ? 'today' : ''}`}>
-                                <div className="day-header">
-                                    <span className="day-name">{day}</span>
-                                    <span className="day-date">{shortDate(dateObj)}</span>
-                                </div>
-
-                                {meal ? (
-                                    <div className="meal-cell-filled" onClick={() => openDetail(day)}>
-                                        <span className="recipe-name">{meal.title}</span>
-                                        {meal.prepTime && (
-                                            <span className="recipe-meta">⏱ {meal.prepTime}m</span>
-                                        )}
-                                        <div className="cell-actions">
-                                            <button
-                                                className="btn-cell-edit"
-                                                onClick={e => { e.stopPropagation(); openPicker(day, true) }}
-                                                title="Edit"
-                                            >
-                                                ✏️
-                                            </button>
-                                            <button
-                                                className="btn-cell-remove"
-                                                onClick={e => { e.stopPropagation(); handleRemove(day) }}
-                                                title="Remove"
-                                            >
-                                                ✕
-                                            </button>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="meal-cell-empty" onClick={() => openPicker(day, false)}>
-                                        <span className="plus-icon">+</span>
-                                        <span className="add-label">Add meal</span>
-                                    </div>
-                                )}
+                            <div key={day} className={`grid-header ${isToday ? 'today' : ''}`}>
+                                {day}
+                                <span className="header-date">{shortDate(dateObj)}</span>
                             </div>
                         )
                     })}
+
+                    {/* Body rows */}
+                    {MEAL_TYPES.map(mealType => (
+                        <>
+                            <div key={`label-${mealType}`} className="row-label">
+                                {MEAL_EMOJI[mealType]} {mealType}
+                            </div>
+                            {DAYS.map((day, i) => {
+                                const meal = plan?.meals?.[day]?.[mealType]
+                                const isToday = toISO(dates[i]) === todayISO
+                                return (
+                                    <div
+                                        key={`${day}-${mealType}`}
+                                        className={`meal-cell ${isToday ? 'today-col' : ''}`}
+                                        onClick={() => handleCellClick(day, mealType)}
+                                        id={`cell-${day}-${mealType}`}
+                                    >
+                                        {meal ? (
+                                            <div className="meal-cell-filled">
+                                                <span className="meal-emoji">{MEAL_EMOJI[mealType]}</span>
+                                                <span className="recipe-name">{meal.recipeTitle}</span>
+                                                <button
+                                                    className="btn-remove-meal"
+                                                    onClick={e => { e.stopPropagation(); handleRemove(day, mealType) }}
+                                                    title="Remove"
+                                                >
+                                                    ✕
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="meal-cell-empty">
+                                                <span className="plus-icon">+</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                )
+                            })}
+                        </>
+                    ))}
                 </div>
             )}
 
             {/* ── Recipe Picker Modal ──────────── */}
-            {pickerDay && (
-                <div className="picker-overlay" onClick={(e) => { if (e.target === e.currentTarget) { setPickerDay(null); setPickerSearch(''); setIsEditing(false) } }}>
+            {pickerSlot && (
+                <div className="picker-overlay" onClick={(e) => { if (e.target === e.currentTarget) { setPickerSlot(null); setPickerSearch('') } }}>
                     <div className="picker-modal">
-                        <h2>{isEditing ? 'Swap Recipe' : 'Choose a Recipe'}</h2>
-                        <div className="picker-subtitle">{pickerDay}</div>
+                        <h2>Choose a Recipe</h2>
+                        <div className="picker-subtitle">
+                            {pickerSlot.day} · {pickerSlot.mealType}
+                        </div>
                         <input
                             className="picker-search"
                             placeholder="Search your recipes…"
@@ -314,7 +321,7 @@ function MealPlanPage() {
                                 ))
                             )}
                         </div>
-                        <button className="picker-close" onClick={() => { setPickerDay(null); setPickerSearch(''); setIsEditing(false) }}>
+                        <button className="picker-close" onClick={() => { setPickerSlot(null); setPickerSearch('') }}>
                             Cancel
                         </button>
                     </div>
@@ -322,80 +329,78 @@ function MealPlanPage() {
             )}
 
             {/* ── Meal Detail Modal ───────────── */}
-            {detailDay && getMeal(detailDay) && (() => {
-                const meal = getMeal(detailDay)
-                return (
-                    <div className="detail-overlay" onClick={(e) => { if (e.target === e.currentTarget) setDetailDay(null) }}>
-                        <div className="detail-modal">
-                            <div className="detail-header">
-                                <h2>{meal.title}</h2>
-                                <button className="detail-close" onClick={() => setDetailDay(null)}>✕</button>
-                            </div>
-
-                            <div className="detail-day-label">{detailDay}</div>
-
-                            <div className="detail-stats">
-                                <div className="detail-stat-card">
-                                    <div className="stat-value">{meal.prepTime || '—'}</div>
-                                    <div className="stat-label">Minutes</div>
-                                </div>
-                                <div className="detail-stat-card">
-                                    <div className="stat-value">{meal.cost ? `$${Number(meal.cost).toFixed(2)}` : '—'}</div>
-                                    <div className="stat-label">Cost</div>
-                                </div>
-                                <div className="detail-stat-card">
-                                    <div className="stat-value">{meal.ingredients?.length || 0}</div>
-                                    <div className="stat-label">Ingredients</div>
-                                </div>
-                            </div>
-
-                            {meal.difficulty && (
-                                <div className="detail-badges">
-                                    <span className={`difficulty-badge difficulty-${meal.difficulty.toLowerCase()}`}>
-                                        {meal.difficulty}
-                                    </span>
-                                </div>
-                            )}
-
-                            {meal.ingredients && meal.ingredients.length > 0 && (
-                                <div className="detail-section">
-                                    <h3>🥘 Ingredients</h3>
-                                    <ul>
-                                        {meal.ingredients.map((ing, idx) => (
-                                            <li key={idx}>{ing}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-
-                            {meal.instructions && (
-                                <div className="detail-section">
-                                    <h3>📋 Instructions</h3>
-                                    <div className="instructions-text">{meal.instructions}</div>
-                                </div>
-                            )}
-
-                            <div className="detail-footer">
-                                <span className="detail-author">Created by <strong>{meal.createdBy}</strong></span>
-                                <div className="detail-actions">
-                                    <button
-                                        className="btn-detail-edit"
-                                        onClick={() => { setDetailDay(null); openPicker(detailDay, true) }}
-                                    >
-                                        ✏️ Edit
-                                    </button>
-                                    <button
-                                        className="btn-detail-remove"
-                                        onClick={() => handleRemove(detailDay)}
-                                    >
-                                        🗑 Remove
-                                    </button>
-                                </div>
-                            </div>
+            {detailSlot && (
+                <div className="meal-detail-overlay" onClick={(e) => { if (e.target === e.currentTarget) setDetailSlot(null) }}>
+                    <div className="meal-detail-modal">
+                        <div className="detail-header">
+                            <h2>{detailSlot.meal.recipeTitle}</h2>
+                            <button className="detail-close" onClick={() => setDetailSlot(null)}>✕</button>
                         </div>
+
+                        <div className="detail-slot">
+                            <span>{detailSlot.day}</span>
+                            <span>{detailSlot.mealType}</span>
+                        </div>
+
+                        {detailSlot.fullRecipe ? (
+                            <>
+                                <div className="detail-stats">
+                                    <div className="detail-stat-card">
+                                        <div className="stat-value">{detailSlot.fullRecipe.prepTime || '—'}</div>
+                                        <div className="stat-label">Minutes</div>
+                                    </div>
+                                    <div className="detail-stat-card">
+                                        <div className="stat-value">{detailSlot.fullRecipe.cost ? `$${Number(detailSlot.fullRecipe.cost).toFixed(2)}` : '—'}</div>
+                                        <div className="stat-label">Cost</div>
+                                    </div>
+                                    <div className="detail-stat-card">
+                                        <div className="stat-value">{detailSlot.fullRecipe.ingredients?.length || 0}</div>
+                                        <div className="stat-label">Ingredients</div>
+                                    </div>
+                                </div>
+
+                                {detailSlot.fullRecipe.ingredients?.length > 0 && (
+                                    <div className="detail-section">
+                                        <h3>🥘 Ingredients</h3>
+                                        <ul>
+                                            {detailSlot.fullRecipe.ingredients.map((ing, idx) => (
+                                                <li key={idx}>{ing}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+
+                                {detailSlot.fullRecipe.instructions && (
+                                    <div className="detail-section">
+                                        <h3>📋 Instructions</h3>
+                                        <div className="instructions-text">{detailSlot.fullRecipe.instructions}</div>
+                                    </div>
+                                )}
+
+                                <div className="detail-footer">
+                                    <span className="author">Created by <strong>{detailSlot.fullRecipe.createdBy}</strong></span>
+                                    <button
+                                        className="btn-remove-from-plan"
+                                        onClick={() => handleRemove(detailSlot.day, detailSlot.mealType)}
+                                    >
+                                        🗑 Remove from Plan
+                                    </button>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="detail-footer">
+                                <span className="author" style={{ color: '#888' }}>Recipe details unavailable (recipe may have been deleted)</span>
+                                <button
+                                    className="btn-remove-from-plan"
+                                    onClick={() => handleRemove(detailSlot.day, detailSlot.mealType)}
+                                >
+                                    🗑 Remove from Plan
+                                </button>
+                            </div>
+                        )}
                     </div>
-                )
-            })()}
+                </div>
+            )}
         </div>
     )
 }

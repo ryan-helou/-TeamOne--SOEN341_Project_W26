@@ -17,6 +17,7 @@ export default defineConfig({
       '/recipes/mine': 'http://localhost:3000',
       '/recipes/friends': 'http://localhost:3000',
       '/recipes/all': 'http://localhost:3000',
+      '/meal-plan': 'http://localhost:3000',
       '/recipes': {
         target: 'http://localhost:3000',
         bypass(req) {

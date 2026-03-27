@@ -4,7 +4,7 @@ import session from 'express-session';
 
 import { loadUsers, saveUsers, getUserAttribute, registerUser, loginUser, updateUser, changePassword, getFriends, getFriendRequests, sendFriendRequest, acceptFriendRequest, declineFriendRequest, getAllUsernames } from "./UserManagement.js";
 import { loadRecipes, addRecipe, getAllRecipes, getRecipesByUser, updateRecipe, deleteRecipe, filterRecipes, getFriendRecipes } from "./RecipeManagement.js";
-import { loadMealPlans, createMealPlan, getMealPlansByUser, getMealPlanByWeek, updateMealPlan, deleteMealPlan } from "./MealPlanManagement.js";
+import { loadMealPlans, getMealPlan, assignMeal, removeMeal, getWeekStart } from "./MealPlanManagement.js";
 
 const app = express();
 const PORT = 3000;
@@ -258,51 +258,42 @@ app.post("/decline-pending-request", (req, res) => {
     res.send({ success: true });
 });
 
-// Meal Plan routes
-app.post("/mealplans", (req, res) => {
-    if (!req.session.username) {
+// ---- Meal Plan Routes ----
+
+app.get("/meal-plan", (req, res) => {
+    if (!req.session.username)
         return res.send({ success: false, message: "Session expired" });
-    }
-    const result = createMealPlan(req.session.username, req.body);
+
+    const weekParam = req.query.week; // expected: "YYYY-MM-DD"
+    if (!weekParam)
+        return res.send({ success: false, message: "Missing week parameter" });
+
+    const weekStart = getWeekStart(weekParam);
+    const plan = getMealPlan(req.session.username, weekStart);
+    return res.send({ success: true, plan });
+});
+
+app.post("/meal-plan", (req, res) => {
+    if (!req.session.username)
+        return res.send({ success: false, message: "Session expired" });
+
+    const { weekStart, day, mealType, recipeId } = req.body;
+    if (!weekStart || !day || !mealType || recipeId === undefined)
+        return res.send({ success: false, message: "Missing required fields" });
+
+    const result = assignMeal(req.session.username, weekStart, day, mealType, Number(recipeId));
     return res.send(result);
 });
 
-app.get("/mealplans", (req, res) => {
-    if (!req.session.username) {
+app.delete("/meal-plan", (req, res) => {
+    if (!req.session.username)
         return res.send({ success: false, message: "Session expired" });
-    }
-    return res.send(getMealPlansByUser(req.session.username));
-});
 
-app.get("/mealplans/week/:weekStart", (req, res) => {
-    if (!req.session.username) {
-        return res.send({ success: false, message: "Session expired" });
-    }
-    const weekStart = req.params.weekStart;
-    const mealPlan = getMealPlanByWeek(req.session.username, weekStart);
+    const { weekStart, day, mealType } = req.body;
+    if (!weekStart || !day || !mealType)
+        return res.send({ success: false, message: "Missing required fields" });
 
-    if (!mealPlan) {
-        return res.send({ success: true, mealPlan: null });
-    }
-
-    return res.send({ success: true, mealPlan });
-});
-
-app.post("/mealplans/:id", (req, res) => {
-    if (!req.session.username) {
-        return res.send({ success: false, message: "Session expired" });
-    }
-    const id = parseInt(req.params.id);
-    const result = updateMealPlan(id, req.session.username, req.body);
-    return res.send(result);
-});
-
-app.delete("/mealplans/:id", (req, res) => {
-    if (!req.session.username) {
-        return res.send({ success: false, message: "Session expired" });
-    }
-    const id = parseInt(req.params.id);
-    const result = deleteMealPlan(id, req.session.username);
+    const result = removeMeal(req.session.username, weekStart, day, mealType);
     return res.send(result);
 });
 

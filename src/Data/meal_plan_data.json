@@ -1,0 +1,55 @@
+[
+  {
+    "username": "TestUser1",
+    "weekStart": "2026-03-23",
+    "meals": {
+      "Monday": {
+        "Breakfast": {
+          "recipeId": 6,
+          "recipeTitle": "Test Pasta"
+        },
+        "Lunch": {
+          "recipeId": 6,
+          "recipeTitle": "Test Pasta"
+        },
+        "Dinner": {
+          "recipeId": 6,
+          "recipeTitle": "Test Pasta"
+        }
+      },
+      "Tuesday": {
+        "Breakfast": null,
+        "Lunch": null,
+        "Dinner": null
+      },
+      "Wednesday": {
+        "Breakfast": null,
+        "Lunch": null,
+        "Dinner": {
+          "recipeId": 6,
+          "recipeTitle": "Test Pasta"
+        }
+      },
+      "Thursday": {
+        "Breakfast": null,
+        "Lunch": null,
+        "Dinner": null
+      },
+      "Friday": {
+        "Breakfast": null,
+        "Lunch": null,
+        "Dinner": null
+      },
+      "Saturday": {
+        "Breakfast": null,
+        "Lunch": null,
+        "Dinner": null
+      },
+      "Sunday": {
+        "Breakfast": null,
+        "Lunch": null,
+        "Dinner": null
+      }
+    }
+  }
+]
