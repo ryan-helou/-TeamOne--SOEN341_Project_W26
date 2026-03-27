@@ -64,6 +64,7 @@ function RecipePage() {
     // Load recipes on mount and when scope changes
     useEffect(() => {
         fetchRecipes()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [scope])
 
     // Clear success after 3s

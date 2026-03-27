@@ -9,6 +9,7 @@ function ProfileView({ username, onEdit, onChangePassword }) {
 
   useEffect(() => {
     fetchProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLogout = async () => {
