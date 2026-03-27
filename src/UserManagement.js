@@ -198,6 +198,11 @@ function validateUser(user) {
     }
 }
 
+/// Returns a list of all usernames
+export function getAllUsernames() {
+    return users.map(u => u.username);
+}
+
 /// Returns a list of username strings for the friends of the user
 export function getFriends(username) {
     let u = users.find(user => user["username"] == username);

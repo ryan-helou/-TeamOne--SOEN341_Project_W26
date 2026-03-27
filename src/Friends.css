@@ -1,0 +1,404 @@
+/* =============================================
+   Friends Page Styles
+   Matches existing design:
+   - Gradient palette: #667eea → #764ba2
+   - Glassmorphism cards
+   - Dark-first with light mode support
+   ============================================= */
+
+/* ---- Layout ---- */
+.friends-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* ---- Top Bar ---- */
+.friends-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.friends-topbar h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.friends-topbar-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* ---- Messages ---- */
+.friends-error {
+    background-color: rgba(220, 38, 38, 0.1);
+    color: #ff6b6b;
+    padding: 0.875rem 1rem;
+    border-radius: 0.5rem;
+    border-left: 4px solid #ff6b6b;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.friends-success {
+    background-color: rgba(34, 197, 94, 0.1);
+    color: #4ade80;
+    padding: 0.875rem 1rem;
+    border-radius: 0.5rem;
+    border-left: 4px solid #4ade80;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+/* ---- Tabs ---- */
+.friends-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 0;
+}
+
+.tab-btn {
+    padding: 0.7rem 1.25rem;
+    border: none;
+    border-radius: 0.5rem 0.5rem 0 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: rgba(255, 255, 255, 0.04);
+    color: #999;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.tab-btn:hover {
+    color: #ccc;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.tab-btn.active {
+    color: white;
+    background: rgba(102, 126, 234, 0.12);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+.tab-badge {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 2rem;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1.3;
+}
+
+/* ---- Loading ---- */
+.friends-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    gap: 1rem;
+}
+
+/* ---- Search Bar ---- */
+.friends-search-wrapper {
+    position: relative;
+    margin-bottom: 1.25rem;
+}
+
+.friends-search-wrapper .search-icon {
+    position: absolute;
+    left: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.friends-search {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.6rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    color: white;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.friends-search::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.friends-search:focus {
+    outline: none;
+    border-color: #667eea;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+/* ---- User List ---- */
+.user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.friends-empty {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #888;
+    font-size: 1rem;
+}
+
+/* ---- User Card ---- */
+.user-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.1rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    transition: all 0.25s ease;
+}
+
+.user-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.user-avatar {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #eee;
+}
+
+/* ---- Friend Badge ---- */
+.friend-badge {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #4ade80;
+    background: rgba(74, 222, 128, 0.1);
+    border: 1px solid rgba(74, 222, 128, 0.25);
+    padding: 0.3rem 0.7rem;
+    border-radius: 2rem;
+    white-space: nowrap;
+}
+
+/* ---- Add Friend Button ---- */
+.btn-add-friend {
+    padding: 0.4rem 0.9rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    white-space: nowrap;
+}
+
+.btn-add-friend:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.45);
+}
+
+/* ---- Request Card ---- */
+.request-card .user-info {
+    flex-direction: row;
+    align-items: center;
+}
+
+.request-card .user-info > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.request-label {
+    font-size: 0.78rem;
+    color: #888;
+    font-weight: 400;
+}
+
+.request-actions {
+    display: flex;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+.btn-accept {
+    padding: 0.4rem 0.85rem;
+    border: none;
+    border-radius: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: rgba(74, 222, 128, 0.12);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.btn-accept:hover {
+    background: rgba(74, 222, 128, 0.2);
+    transform: translateY(-1px);
+}
+
+.btn-decline {
+    padding: 0.4rem 0.85rem;
+    border: none;
+    border-radius: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: rgba(255, 107, 107, 0.1);
+    color: #ff6b6b;
+    border: 1px solid rgba(255, 107, 107, 0.25);
+}
+
+.btn-decline:hover {
+    background: rgba(255, 107, 107, 0.18);
+    transform: translateY(-1px);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 600px) {
+    .friends-page {
+        padding: 1rem;
+    }
+
+    .friends-topbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .friends-topbar h1 {
+        font-size: 2rem;
+    }
+
+    .friends-tabs {
+        overflow-x: auto;
+    }
+
+    .tab-btn {
+        font-size: 0.82rem;
+        padding: 0.6rem 0.9rem;
+    }
+
+    .user-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+    }
+
+    .request-actions {
+        justify-content: flex-end;
+    }
+}
+
+/* ---- Light mode ---- */
+@media (prefers-color-scheme: light) {
+    .user-card {
+        background: white;
+        border-color: #e8e8e8;
+    }
+
+    .user-card:hover {
+        background: #f9f9f9;
+        border-color: #ddd;
+    }
+
+    .user-name {
+        color: #1a1a2e;
+    }
+
+    .friends-search {
+        background: #fafafa;
+        border-color: #ddd;
+        color: #333;
+    }
+
+    .friends-search::placeholder {
+        color: #aaa;
+    }
+
+    .friends-search:focus {
+        background: white;
+    }
+
+    .tab-btn {
+        background: #f5f5f5;
+        color: #777;
+    }
+
+    .tab-btn:hover {
+        color: #555;
+        background: #eee;
+    }
+
+    .tab-btn.active {
+        color: #333;
+        background: rgba(102, 126, 234, 0.08);
+    }
+
+    .friends-tabs {
+        border-bottom-color: #eee;
+    }
+
+    .btn-accept {
+        background: rgba(74, 222, 128, 0.08);
+    }
+
+    .btn-decline {
+        background: rgba(255, 107, 107, 0.06);
+    }
+}

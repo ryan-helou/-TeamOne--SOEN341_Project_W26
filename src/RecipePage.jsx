@@ -24,6 +24,9 @@ function RecipePage() {
     const storedUser = localStorage.getItem('user')
     const currentUser = storedUser ? JSON.parse(storedUser).username : null
 
+    // Recipe scope toggle
+    const [scope, setScope] = useState('mine') // 'mine' | 'friends'
+
     // Recipe data
     const [allRecipes, setAllRecipes] = useState([])
     const [loading, setLoading] = useState(true)
@@ -58,10 +61,10 @@ function RecipePage() {
     }
     const [viewingRecipe, setViewingRecipe] = useState(null)
 
-    // Load recipes on mount
+    // Load recipes on mount and when scope changes
     useEffect(() => {
         fetchRecipes()
-    }, [])
+    }, [scope])
 
     // Clear success after 3s
     useEffect(() => {
@@ -75,9 +78,20 @@ function RecipePage() {
         setLoading(true)
         setError('')
         try {
-            const res = await fetch('/recipes/mine')
-            const data = await res.json()
-            setAllRecipes(data)
+            if (scope === 'friends') {
+                const res = await fetch('/recipes/friends')
+                const data = await res.json()
+                if (data.success) {
+                    setAllRecipes(data.recipes)
+                } else {
+                    setError(data.message || 'Failed to load friend recipes')
+                    setAllRecipes([])
+                }
+            } else {
+                const res = await fetch('/recipes/mine')
+                const data = await res.json()
+                setAllRecipes(data)
+            }
         } catch {
             setError('Failed to load recipes')
         } finally {
@@ -206,8 +220,9 @@ function RecipePage() {
                 <div className="recipe-topbar-actions">
                     <button className="btn-back" onClick={handleLogout}>🚪 Logout</button>
                     <Link to="/meal-plan" className="btn-back">📅 Meal Plan</Link>
+                    <Link to="/friends" className="btn-back">👥 Friends</Link>
                     <Link to="/profile" className="btn-back">👤 Profile</Link>
-                    {currentUser && (
+                    {currentUser && scope === 'mine' && (
                         <button
                             id="btn-create-recipe"
                             className="btn-create"
@@ -217,6 +232,22 @@ function RecipePage() {
                         </button>
                     )}
                 </div>
+            </div>
+
+            {/* Scope Toggle */}
+            <div className="recipe-scope-toggle">
+                <button
+                    className={`scope-btn ${scope === 'mine' ? 'active' : ''}`}
+                    onClick={() => setScope('mine')}
+                >
+                    📖 My Recipes
+                </button>
+                <button
+                    className={`scope-btn ${scope === 'friends' ? 'active' : ''}`}
+                    onClick={() => setScope('friends')}
+                >
+                    👥 Friends' Recipes
+                </button>
             </div>
 
             {/* Messages */}
@@ -331,14 +362,16 @@ function RecipePage() {
                             <span className="empty-icon">🍽️</span>
                             {isFiltered || searchTerm
                                 ? 'No recipes match your search or filters.'
-                                : 'No recipes yet. Create the first one!'}
+                                : scope === 'friends'
+                                    ? 'No friend recipes to show. Add some friends first!'
+                                    : 'No recipes yet. Create the first one!'}
                         </div>
                     ) : (
                         displayedRecipes.map(recipe => (
                             <RecipeCard
                                 key={recipe.id}
                                 recipe={recipe}
-                                currentUser={currentUser}
+                                currentUser={scope === 'friends' ? null : currentUser}
                                 onView={setViewingRecipe}
                                 onEdit={handleEditClick}
                                 onDelete={handleDelete}
@@ -361,7 +394,7 @@ function RecipePage() {
             {viewingRecipe && (
                 <RecipeDetail
                     recipe={viewingRecipe}
-                    currentUser={currentUser}
+                    currentUser={scope === 'friends' ? null : currentUser}
                     onClose={() => setViewingRecipe(null)}
                     onEdit={handleEditClick}
                     onDelete={handleDelete}

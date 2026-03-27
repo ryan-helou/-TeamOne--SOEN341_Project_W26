@@ -2,7 +2,7 @@ import express from 'express';
 import session from 'express-session';
 //import { testUserDatabase } from "./UserManagement.js";
 
-import { loadUsers, saveUsers, getUserAttribute, registerUser, loginUser, updateUser, changePassword, getFriends, getFriendRequests, sendFriendRequest, acceptFriendRequest, declineFriendRequest } from "./UserManagement.js";
+import { loadUsers, saveUsers, getUserAttribute, registerUser, loginUser, updateUser, changePassword, getFriends, getFriendRequests, sendFriendRequest, acceptFriendRequest, declineFriendRequest, getAllUsernames } from "./UserManagement.js";
 import { loadRecipes, addRecipe, getAllRecipes, getRecipesByUser, updateRecipe, deleteRecipe, filterRecipes, getFriendRecipes } from "./RecipeManagement.js";
 import { loadMealPlans, createMealPlan, getMealPlansByUser, getMealPlanByWeek, updateMealPlan, deleteMealPlan } from "./MealPlanManagement.js";
 
@@ -184,6 +184,13 @@ app.post("/recipes/filter", (req, res) => {
     }
 
     res.send({ success: true, recipes: filterRecipes(recipes, filterCriteria) });
+});
+
+app.get("/users/all", (req, res) => {
+    if (!req.session.username)
+        return res.send({ success: false, message: "Session expired" });
+
+    res.send({ success: true, usernames: getAllUsernames() });
 });
 
 app.get("/friends/", (req, res) => {
