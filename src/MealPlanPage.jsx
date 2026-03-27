@@ -39,8 +39,6 @@ function weekDates(monday) {
 /* ── Main Component ─────────────────────────────── */
 function MealPlanPage() {
     const navigate = useNavigate()
-    const storedUser = localStorage.getItem('user')
-    const currentUser = storedUser ? JSON.parse(storedUser).username : null
 
     // Current week anchor (always a Monday)
     const [monday, setMonday] = useState(() => getMonday(new Date()))
