@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import './ProfileManagement.css'
+import '../auth/ProfileManagement.css'
 
 const DIFFICULTY_LEVELS = ['Easy', 'Medium', 'Hard']
 const DIETARY_TAGS = ['Vegan', 'Vegetarian', 'Fish', 'Red Meat', 'Dessert', 'High Protein', 'Low Calories']

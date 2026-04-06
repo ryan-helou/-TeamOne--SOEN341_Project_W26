@@ -14,7 +14,7 @@ import {
     changePassword, updateUser, isPasswordStrong, getUser,
     userAlreadyExists, getFriends, getFriendRequests,
     sendFriendRequest, acceptFriendRequest, declineFriendRequest,
-} from '../UserManagement.js'
+} from '../server/UserManagement.js'
 
 beforeEach(() => {
     vi.clearAllMocks()

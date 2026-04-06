@@ -8,17 +8,17 @@ vi.mock('fs', () => ({
     },
 }))
 
-vi.mock('../UserManagement.js', () => ({
+vi.mock('../server/UserManagement.js', () => ({
     getFriends: vi.fn(),
 }))
 
 import fs from 'fs'
-import { getFriends } from '../UserManagement.js'
+import { getFriends } from '../server/UserManagement.js'
 import {
     loadRecipes, addRecipe, updateRecipe, deleteRecipe,
     getRecipe, getAllRecipes, getRecipesByUser,
     filterRecipes, getFriendRecipes,
-} from '../RecipeManagement.js'
+} from '../server/RecipeManagement.js'
 
 const validRecipe = {
     title: 'Pasta',

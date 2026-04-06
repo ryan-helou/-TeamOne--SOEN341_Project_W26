@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import Login from './Login'
-import Register from './Register'
-import ProfileView from './ProfileView'
-import ProfileEdit from './ProfileEdit'
-import ChangePassword from './ChangePassword'
-import RecipePage from './RecipePage'
-import MealPlanPage from './MealPlanPage'
-import FriendsPage from './FriendsPage'
+import Login from './components/auth/Login'
+import Register from './components/auth/Register'
+import ProfileView from './components/auth/ProfileView'
+import ProfileEdit from './components/auth/ProfileEdit'
+import ChangePassword from './components/auth/ChangePassword'
+import RecipePage from './components/recipes/RecipePage'
+import MealPlanPage from './components/mealplan/MealPlanPage'
+import FriendsPage from './components/friends/FriendsPage'
 
 function ProfilePage() {
   const [view, setView] = useState('view')

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import RecipeCreate from './RecipeCreate'
 import RecipeEdit from './RecipeEdit'
-import './ProfileManagement.css'
+import '../auth/ProfileManagement.css'
 
 function RecipeCard({ recipe, currentUser, onEdit, onDelete }) {
   const [confirmDelete, setConfirmDelete] = useState(false)

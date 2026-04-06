@@ -15,4 +15,4 @@ COPY src/ ./src/
 # Copy Vite build output into public/ so Express static serving works unchanged
 COPY --from=builder /app/dist ./public/
 EXPOSE 3000
-CMD ["node", "src/Server.js"]
+CMD ["node", "src/server/Server.js"]
