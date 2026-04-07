@@ -141,9 +141,23 @@ export function assignMeal(username, weekStart, day, mealType, recipeId) {
         return { success: false, message: "You can only add your own or friends' recipes to the meal plan" };
     }
 
-    let plan = mealPlans.find(
+    // Check for duplicate recipes in the same week
+    const existingPlan = mealPlans.find(
         (mp) => mp.username === username && mp.weekStart === weekStart
     );
+    if (existingPlan) {
+        for (const d of DAYS) {
+            for (const t of MEAL_TYPES) {
+                const slot = existingPlan.meals[d]?.[t];
+                if (d === day && t === mealType) continue;
+                if (slot && slot.recipeId === recipeId) {
+                    return { success: false, message: `"${recipe.title}" is already planned for ${d} ${t} this week`};
+                }
+            }
+        }
+    }
+    
+    let plan = existingPlan;
 
     if (!plan) {
         plan = { username, weekStart, meals: emptyWeekMeals() };
