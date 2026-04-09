@@ -36,6 +36,6 @@ https://docs.google.com/spreadsheets/d/1NNvGi2UNgtIRuYHFgibkHyU1sLK9ZTMl/edit?us
 ## How to Run:
 in the terminal, run:
 `npm install`
-`node src/Server.js`
+`node src/server/Server.js`
 in a different terminal, run:
 `npm run dev`
