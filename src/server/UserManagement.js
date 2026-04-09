@@ -9,11 +9,11 @@ const data_path = path.join(dir, "Data", "user_data.json");
 
 const referenceUser = {
     username : "TestUser",
-    fullName : "Happy Weewee",
+    fullName : "fullname lastname",
     password : "hello123",
-    diet : "likes food",
-    allergies : "Idiot",
-    preferences : "Imbecile",
+    diet : "no diet",
+    allergies : "no allergies",
+    preferences : "no preferences",
     friends : [],
     pendingFriends : []
 }

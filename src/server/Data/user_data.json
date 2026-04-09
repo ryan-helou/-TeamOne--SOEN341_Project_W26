@@ -2,73 +2,88 @@
   {
     "username": "user1",
     "password": "Hello1",
-    "diet": "burgers",
-    "meat": "medium rare",
-    "fullName": "Happy Weewee",
-    "allergies": "Idiot",
-    "preferences": "Imbecile",
-    "friends": [],
+    "diet": "meat",
+    "fullName": "James",
+    "allergies": "peanuts",
+    "preferences": "spicy",
+    "friends": [
+      "lebronjames",
+      "user2",
+      "NewUser"
+    ],
     "pendingFriends": []
   },
   {
     "username": "user3",
     "password": "ABC",
     "diet": "vegan",
-    "meat": "medium rare",
-    "fullName": "Happy Weewee",
-    "allergies": "Idiot",
-    "preferences": "Imbecile",
-    "friends": [],
+    "fullName": "John",
+    "allergies": "none",
+    "preferences": "sweet",
+    "friends": [
+      "lebronjames",
+      "yoyoyo"
+    ],
     "pendingFriends": []
   },
   {
     "username": "user2",
     "password": "Hello2",
-    "diet": "shrimp",
-    "meat": "medium rare",
-    "fullName": "Happy Weewee",
-    "allergies": "Idiot",
-    "preferences": "Imbecile",
-    "friends": [],
+    "diet": "fish only",
+    "fullName": "Johnny",
+    "allergies": "shellfish",
+    "preferences": "savory",
+    "friends": [
+      "user1",
+      "lebronjames"
+    ],
     "pendingFriends": []
   },
   {
     "username": "lebronjames",
     "password": "ryan123321@Q",
-    "diet": "likes food",
-    "fullName": "Happy Weewee",
-    "allergies": "Idiot",
-    "preferences": "Imbecile",
-    "friends": [],
+    "diet": "everything",
+    "fullName": "James",
+    "allergies": "none",
+    "preferences": "grilled",
+    "friends": [
+      "user1",
+      "user2",
+      "user3"
+    ],
     "pendingFriends": []
   },
   {
     "username": "yoyoyo",
     "password": "1234567890POoP1",
-    "diet": "likes food",
-    "fullName": "Happy Weewee",
-    "allergies": "Idiot",
-    "preferences": "Imbecile",
-    "friends": [],
+    "diet": "meat",
+    "fullName": "Johnathan",
+    "allergies": "dairy",
+    "preferences": "crispy",
+    "friends": [
+      "user3"
+    ],
     "pendingFriends": []
   },
   {
     "username": "NewUser",
     "password": "eeeeeEEE333",
-    "diet": "likes food",
-    "fullName": "Happy Weewee",
-    "allergies": "Idiot",
-    "preferences": "Imbecile",
-    "friends": [],
+    "diet": "everything",
+    "fullName": "Jamieson",
+    "allergies": "gluten",
+    "preferences": "spicy",
+    "friends": [
+      "user1"
+    ],
     "pendingFriends": []
   },
   {
     "username": "TestUser1",
     "password": "Password123",
-    "fullName": "Happy Weewee",
-    "diet": "likes food",
-    "allergies": "Idiot",
-    "preferences": "Imbecile",
+    "fullName": "Joseph",
+    "diet": "vegan",
+    "allergies": "none",
+    "preferences": "fresh",
     "friends": [],
     "pendingFriends": []
   }

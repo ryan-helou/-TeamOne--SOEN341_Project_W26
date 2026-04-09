@@ -149,29 +149,34 @@
   },
     {
     "id": 7,
-    "title": "Evil soup",
+    "title": "Tomato Soup",
     "ingredients": [
-      "shrek sauce",
-      "fish"
+      "Tomato",
+      "Water",
+      "Salt",
+      "Pepper",
+      "Milk"
     ],
-    "instructions": "Cook everything\nIn a dish",
+    "instructions": "Cook everything in a dish, add salt and peppper, mix with milk",
     "prepTime": 20,
     "difficulty": "Hell",
     "cost": 100,
     "dietaryTags": [
       "Vegan",
-      "Fish",
       "Low Calories"
     ],
     "createdBy": "user3"
   },
   {
     "id": 8,
-    "title": "Happy soup",
+    "title": "Friendly soup",
     "ingredients": [
-      "Hello"
+      "Leftovers",
+      "Vegetables",
+      "Extra sauces",
+      "Salt and pepper"
     ],
-    "instructions": "A",
+    "instructions": "Mix everything in a huge bowl. Stir well until homogeneous. Boil. Eat soup",
     "prepTime": 10,
     "difficulty": "Easy",
     "cost": 20,
@@ -180,5 +185,22 @@
       "Low Calories"
     ],
     "createdBy": "user3"
+  },
+  {
+    "id": 8,
+    "title": "GOAT Burger",
+    "ingredients": [
+      "GOAT",
+      "Burger sauce",
+      "Special sauce"
+    ],
+    "instructions": "Mix GOAT with the sauces, in a bun. Enjoy",
+    "prepTime": 10,
+    "difficulty": "Hell",
+    "cost": 20,
+    "dietaryTags": [
+      "Low Calories"
+    ],
+    "createdBy": "lebronjames"
   }
 ]
