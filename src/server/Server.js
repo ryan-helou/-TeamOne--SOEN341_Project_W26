@@ -66,8 +66,6 @@ app.post("/change-password", (req, res) => {
 });
 
 app.get("/user/:key", (req, res) => {
-    console.log("Hello")
-    console.log(req.session.username)
     if (!req.session.username) {
         return res.send(undefined)
     }
