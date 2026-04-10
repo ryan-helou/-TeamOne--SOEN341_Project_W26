@@ -47,6 +47,7 @@ function MealPlanPage() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
+    const [pickerError, setPickerError] = useState('')   // error shown inside picker modal
 
     // Modal state
     const [pickerSlot, setPickerSlot] = useState(null)   // { day, mealType }
@@ -99,10 +100,39 @@ function MealPlanPage() {
         }
     }, [success])
 
+    useEffect(() => {
+        if (error) {
+            const t = setTimeout(() => setError(''), 5000)
+            return () => clearTimeout(t)
+        }
+    }, [error])
+
     /* ── Actions ────────────────────────────────── */
+
+    /* ── Duplicate detection helper ──────────── */
+    /** Returns a Set of recipeIds already used in the current week's plan. */
+    const usedRecipeIds = (() => {
+        const ids = new Set()
+        if (!plan?.meals) return ids
+        for (const day of DAYS) {
+            for (const mt of MEAL_TYPES) {
+                const slot = plan.meals[day]?.[mt]
+                if (slot?.recipeId != null) ids.add(slot.recipeId)
+            }
+        }
+        return ids
+    })()
 
     const handleAssign = async (recipe) => {
         if (!pickerSlot) return
+
+        // Client-side duplicate guard
+        if (usedRecipeIds.has(recipe.id)) {
+            setPickerError(`"${recipe.title}" is already in your meal plan this week!`)
+            return
+        }
+
+        setPickerError('')
         try {
             const res = await fetch('/meal-plan', {
                 method: 'POST',
@@ -119,12 +149,14 @@ function MealPlanPage() {
                 setPlan(data.plan)
                 setPickerSlot(null)
                 setPickerSearch('')
+                setPickerError('')
                 setSuccess(`Assigned "${recipe.title}" to ${pickerSlot.day} ${pickerSlot.mealType}`)
             } else {
-                setError(data.message || 'Failed to assign meal')
+                // Show duplicate / other error inside the picker so user sees it
+                setPickerError(data.message || 'Failed to assign meal')
             }
         } catch {
-            setError('Could not connect to server')
+            setPickerError('Could not connect to server')
         }
     }
 
@@ -149,6 +181,7 @@ function MealPlanPage() {
     }
 
     const handleCellClick = (day, mealType) => {
+        setPickerError('')
         const meal = plan?.meals?.[day]?.[mealType]
         if (meal) {
             // Look up full recipe data if we have it
@@ -296,6 +329,11 @@ function MealPlanPage() {
                             onChange={e => setPickerSearch(e.target.value)}
                             autoFocus
                         />
+                        {pickerError && (
+                            <div className="picker-error" id="picker-duplicate-error">
+                                ⚠️ {pickerError}
+                            </div>
+                        )}
                         <div className="picker-list">
                             {filteredPickerRecipes.length === 0 ? (
                                 <div className="picker-empty">
@@ -304,10 +342,20 @@ function MealPlanPage() {
                                         : 'No recipes match your search.'}
                                 </div>
                             ) : (
-                                filteredPickerRecipes.map(recipe => (
-                                    <div key={recipe.id} className="picker-item" onClick={() => handleAssign(recipe)}>
+                                filteredPickerRecipes.map(recipe => {
+                                    const isDuplicate = usedRecipeIds.has(recipe.id)
+                                    return (
+                                    <div
+                                        key={recipe.id}
+                                        className={`picker-item ${isDuplicate ? 'picker-item-disabled' : ''}`}
+                                        onClick={() => !isDuplicate && handleAssign(recipe)}
+                                        title={isDuplicate ? 'Already in your plan this week' : ''}
+                                    >
                                         <div className="picker-item-info">
-                                            <div className="picker-item-title">{recipe.title}</div>
+                                            <div className="picker-item-title">
+                                                {recipe.title}
+                                                {isDuplicate && <span className="duplicate-badge">Already Planned</span>}
+                                            </div>
                                             <div className="picker-item-meta">
                                                 {recipe.prepTime ? `⏱ ${recipe.prepTime}m` : ''}
                                                 {recipe.difficulty ? ` · ${recipe.difficulty}` : ''}
@@ -316,10 +364,11 @@ function MealPlanPage() {
                                         </div>
                                         <span className="assign-arrow">→</span>
                                     </div>
-                                ))
+                                    )
+                                })
                             )}
                         </div>
-                        <button className="picker-close" onClick={() => { setPickerSlot(null); setPickerSearch('') }}>
+                        <button className="picker-close" onClick={() => { setPickerSlot(null); setPickerSearch(''); setPickerError('') }}>
                             Cancel
                         </button>
                     </div>

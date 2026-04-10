@@ -407,6 +407,47 @@
     font-size: 0.95rem;
 }
 
+/* ---- Duplicate Prevention ---- */
+.picker-error {
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    color: #fbbf24;
+    padding: 0.6rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+    text-align: center;
+    font-size: 0.88rem;
+    font-weight: 500;
+    animation: mpSlideUp 0.25s ease;
+}
+
+.picker-item-disabled {
+    opacity: 0.45;
+    cursor: not-allowed !important;
+    pointer-events: auto;
+}
+
+.picker-item-disabled:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+    transform: none;
+}
+
+.duplicate-badge {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.25);
+    border-radius: 2rem;
+    vertical-align: middle;
+}
+
 .picker-close {
     display: block;
     width: 100%;
