@@ -259,13 +259,13 @@ export function filterRecipes(recipeList, filterCriteria) {
         const numericPrep = prepTime !== undefined ? Number(prepTime) : undefined;
         const numericCost = cost !== undefined ? Number(cost) : undefined;
 
-        if (numericPrep && recipe.prepTime > numericPrep) {
+        if ((numericPrep || numericPrep === 0) && recipe.prepTime > numericPrep) {
             return false
         }
         if (difficulty && getDifficultyLevel(recipe.difficulty) > getDifficultyLevel(difficulty)) {
             return false
         }
-        if (numericCost && recipe.cost > numericCost) {
+        if ((numericCost || numericCost === 0) && recipe.cost > numericCost) {
             return false
         }
         if (dietaryTags && recipe.dietaryTags) {
