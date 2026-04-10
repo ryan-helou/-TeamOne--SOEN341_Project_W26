@@ -365,7 +365,7 @@ function MealPlanPage() {
                                         <span className="assign-arrow">→</span>
                                     </div>
                                     )
-                                }))
+                                })
                             )}
                         </div>
                         <button className="picker-close" onClick={() => { setPickerSlot(null); setPickerSearch(''); setPickerError('') }}>
