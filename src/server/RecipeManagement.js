@@ -85,7 +85,7 @@ export function addRecipe(username, recipeData) {
         return { success: false, message: "Recipe title is required" };
     }
 
-    if (!ingredients || !Array.isArray(ingredients) || ingredients.length == 0) {
+    if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) {
         return { success: false, message: "Ingredients are required as list" };
     }
 
@@ -162,7 +162,7 @@ export function updateRecipe(id, username, recipeData) {
         return { success: false, message: "Recipe title cannot be empty" };
     }
 
-    if (ingredients !== undefined && (!Array.isArray(ingredients) || ingredients.length == 0)) {
+    if (ingredients !== undefined && (!Array.isArray(ingredients) || ingredients.length === 0)) {
         return { success: false, message: "Ingredients cannot be empty" };
     }
 

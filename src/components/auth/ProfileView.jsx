@@ -20,8 +20,7 @@ function ProfileView({ username, onEdit, onChangePassword }) {
       localStorage.removeItem('user');
       // Redirect to login page
       navigate('/login');
-    } catch (error) {
-      console.error('Error logging out:', error);
+    } catch {
       // Still redirect even if there's an error
       localStorage.removeItem('user');
       navigate('/login');
@@ -45,8 +44,8 @@ function ProfileView({ username, onEdit, onChangePassword }) {
       };
 
       setProfile(profileData);
-    } catch (error) {
-      console.error('Error fetching profile:', error);
+    } catch {
+      // Error handled silently — profile will show default state
     } finally {
       setLoading(false);
     }

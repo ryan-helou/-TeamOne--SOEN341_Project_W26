@@ -205,7 +205,7 @@ export function getAllUsernames() {
 
 /// Returns a list of username strings for the friends of the user
 export function getFriends(username) {
-    let u = users.find(user => user["username"] == username);
+    let u = users.find(user => user["username"] === username);
     if (!u)
         return undefined;
 

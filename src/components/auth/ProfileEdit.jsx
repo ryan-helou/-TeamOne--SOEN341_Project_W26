@@ -31,8 +31,7 @@ function ProfileEdit({ onCancel, onSaveSuccess }) {
         allergies: await allergiesResponse.text() || '',
         preferences: await preferencesResponse.text() || ''
       });
-    } catch (error) {
-      console.error('Error fetching profile:', error);
+    } catch {
       setError('Failed to load profile data');
     } finally {
       setLoading(false);
