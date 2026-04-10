@@ -121,7 +121,8 @@ Improve code quality and maintainability of the MealMajor application through re
 - **Ghassan Naja:** Static analysis (1 bug), code review, final verification and testing
 - **Ryan Helou:** Static analysis (1 bug), code review, final verification and testing
 - **Angad Malhotra:** Story #17 (Duplicate meal prevention - Backend), static analysis (1 bug), code review
-- **Dani Elbazzi:** Story #17 (Duplicate meal prevention - Frontend), code review, final verification and testing
+- **Dani Elbazzi:** Story #17 (Duplicate meal prevention – Frontend + unit tests), CI lint fix, created PR, code review, final verification and testing
+
 
 ## Risks Identified
 - **Low Risk:** Story #17 (Straightforward validation check on existing meal plan logic)
